@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.env
+
+# 运行时产物
+backend/generated/
+backend/uploads/
+backend/shanhuo.db
+
+# Node
+frontend/node_modules/
+
+# 前端构建产物（交付时可保留，便于直接运行）
+# frontend/dist/
