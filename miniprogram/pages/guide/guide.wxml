@@ -38,7 +38,9 @@
   <block wx:if="{{story}}">
     <view class="story-box">{{story}}</view>
     <view wx:if="{{demo}}" class="demo-note">演示文案 · 配置 Key 后由大模型实时生成</view>
-    <button wx:if="{{audioUrl}}" class="btn-primary play-btn" bindtap="playAudio">▶ 播放语音讲解</button>
+    <button wx:if="{{audioUrl}}" class="btn-primary play-btn" bindtap="playAudio">
+      {{playing ? '⏸ 暂停讲解' : '▶ 播放语音讲解'}}
+    </button>
     <view wx:elif="{{loadingAudio}}" class="loading-line">语音合成中…</view>
   </block>
 

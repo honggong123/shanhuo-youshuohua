@@ -72,7 +72,9 @@
   <!-- 语音 -->
   <view wx:if="{{tab === 'audio'}}" class="panel">
     <block wx:if="{{audioUrl}}">
-      <button class="btn-primary play-btn" bindtap="playAudio">▶ 播放语音介绍</button>
+      <button class="btn-primary play-btn" bindtap="playAudio">
+        {{playing ? '⏸ 暂停播放' : '▶ 播放语音介绍'}}
+      </button>
       <view class="story">{{gen ? gen.title + '。' + gen.story : ''}}</view>
     </block>
     <view wx:elif="{{audioLoading}}" class="loading-line">语音合成中…</view>

@@ -9,6 +9,7 @@ Page({
     current: '',
     story: '',
     audioUrl: '',
+    playing: false,
     question: '',
     loadingStory: false,
     loadingAudio: false,
@@ -67,7 +68,7 @@ Page({
 
   async tell() {
     if (!this.data.current) return
-    this.setData({ loadingStory: true, error: '', audioUrl: '' })
+    this.setData({ loadingStory: true, error: '', audioUrl: '', playing: false })
     try {
       const res = await api.guide(this.data.current)
       this.setData({ story: res.story, demo: res.demo, loadingAudio: true, loadingStory: false })
@@ -85,7 +86,7 @@ Page({
   async ask() {
     const q = this.data.question.trim()
     if (!q) return
-    this.setData({ loadingStory: true, error: '', audioUrl: '' })
+    this.setData({ loadingStory: true, error: '', audioUrl: '', playing: false })
     try {
       const res = await api.guide(this.data.current, q)
       this.setData({ story: res.story, demo: res.demo, loadingStory: false })
@@ -96,9 +97,26 @@ Page({
 
   playAudio() {
     if (!this.data.audioUrl) return
-    if (!this.audio) this.audio = wx.createInnerAudioContext()
-    this.audio.src = api.BASE_URL + this.data.audioUrl
-    this.audio.play()
+    if (!this.audio) {
+      this.audio = wx.createInnerAudioContext()
+      this.audio.onEnded(() => this.setData({ playing: false }))
+      this.audio.onError(() => {
+        this.setData({ playing: false })
+        wx.showToast({ title: '播放失败', icon: 'none' })
+      })
+    }
+    const full = api.BASE_URL + this.data.audioUrl
+    if (this.audio.src !== full) {
+      this.audio.src = full
+      this.audio.seek(0)
+    }
+    if (this.data.playing) {
+      this.audio.pause()
+      this.setData({ playing: false })
+    } else {
+      this.audio.play()
+      this.setData({ playing: true })
+    }
   },
 
   onInput(e) {
