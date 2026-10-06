@@ -228,3 +228,46 @@
   color: #44403c;
   line-height: 1.7;
 }
+
+.price-box {
+  border-radius: 18rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.price-amber {
+  background: #fdf3e3;
+}
+
+.price-green {
+  background: #f2f9f1;
+}
+
+.price-label {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #d97f16;
+}
+
+.price-green .price-label {
+  color: #336737;
+}
+
+.price-text {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #44403c;
+  line-height: 1.7;
+}
+
+.value-item {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #44403c;
+}
+
+.price-note {
+  margin-top: 16rpx;
+  font-size: 20rpx;
+  color: #a8a29e;
+}

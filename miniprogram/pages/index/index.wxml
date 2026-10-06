@@ -44,10 +44,11 @@
 
   <!-- Tabs -->
   <view class="tabs">
-    <view class="tab-item {{tab === 'copy' ? 'tab-on' : ''}}" data-tab="copy" bindtap="switchTab">✍️ 文案</view>
-    <view class="tab-item {{tab === 'poster' ? 'tab-on' : ''}}" data-tab="poster" bindtap="switchTab">🖼️ 海报</view>
-    <view class="tab-item {{tab === 'audio' ? 'tab-on' : ''}}" data-tab="audio" bindtap="switchTab">🔊 语音</view>
-    <view class="tab-item {{tab === 'script' ? 'tab-on' : ''}}" data-tab="script" bindtap="switchTab">🎬 脚本</view>
+    <view class="tab-item {{tab === 'copy' ? 'tab-on' : ''}}" data-tab="copy" bindtap="switchTab">文案</view>
+    <view class="tab-item {{tab === 'poster' ? 'tab-on' : ''}}" data-tab="poster" bindtap="switchTab">海报</view>
+    <view class="tab-item {{tab === 'audio' ? 'tab-on' : ''}}" data-tab="audio" bindtap="switchTab">语音</view>
+    <view class="tab-item {{tab === 'script' ? 'tab-on' : ''}}" data-tab="script" bindtap="switchTab">脚本</view>
+    <view class="tab-item {{tab === 'price' ? 'tab-on' : ''}}" data-tab="price" bindtap="switchTab">价格</view>
   </view>
 
   <!-- 文案 -->
@@ -94,6 +95,23 @@
       </view>
     </block>
     <view wx:else class="loading-line">脚本生成中…</view>
+  </view>
+
+  <!-- 价格价值 -->
+  <view wx:if="{{tab === 'price'}}" class="panel">
+    <block wx:if="{{gen && gen.price}}">
+      <view class="price-box price-amber">
+        <view class="price-label">🏷️ 市场参考价</view>
+        <view class="price-text">{{gen.price.reference || '暂无'}}</view>
+      </view>
+      <view class="price-box price-green">
+        <view class="price-label">💡 定价建议</view>
+        <view class="price-text">{{gen.price.suggestion || '暂无'}}</view>
+      </view>
+      <view wx:for="{{gen.value}}" wx:key="index" class="value-item">✦ {{item}}</view>
+      <view class="price-note">* 价格为 AI 结合产品类目的估算参考，实际以当地行情为准</view>
+    </block>
+    <view wx:else class="loading-line">价格与价值分析生成中…</view>
   </view>
 </view>
 

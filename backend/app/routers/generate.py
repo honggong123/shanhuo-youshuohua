@@ -4,7 +4,7 @@ import hashlib
 from fastapi import APIRouter
 
 from .. import config
-from ..schemas import GenerateIn, GenerateOut, Scene
+from ..schemas import GenerateIn, GenerateOut, PriceInfo, Scene
 from ..demo_data import DEMO_PRODUCTS
 from ..services import llm
 
@@ -13,6 +13,8 @@ router = APIRouter()
 PROMPT = """你是顶尖的农产品电商文案策划。请根据以下产品信息生成营销文案，只输出一个 JSON 对象，不要任何其他文字：
 {{"title":"吸睛的主标题(12字内)","selling_points":["卖点1","卖点2","卖点3","卖点4"],
 "story":"120字左右、有画面感的乡土故事","hashtags":["#话题1","#话题2","#话题3"],
+"price":{{"reference":"该产品的市场参考价（产地收购价/电商零售价的大致区间，用元表述，尽量符合当前行情）","suggestion":"给农户的定价与包装建议（40字内，如礼盒化/分级定价策略）"}},
+"value":["营养价值一句话","文化或产地价值一句话","送礼或食用场景一句话"],
 "video_script":[{{"shot":"分镜1","visual":"画面描述","narration":"口播词"}},...]}}（3-5个分镜，口播词口语化，最后一个分镜引导购买）
 
 产品信息：
@@ -31,8 +33,16 @@ def _demo(info: GenerateIn) -> GenerateOut:
     return GenerateOut(
         title=p["title"], selling_points=p["selling_points"], story=p["story"],
         hashtags=p["hashtags"], video_script=[Scene(**s) for s in p["video_script"]],
-        demo=True,
+        price=PriceInfo(**p["price"]), value=p["value"], demo=True,
     )
+
+
+def _parse_price(raw) -> PriceInfo:
+    if isinstance(raw, dict):
+        return PriceInfo(reference=str(raw.get("reference", "")), suggestion=str(raw.get("suggestion", "")))
+    if raw:
+        return PriceInfo(reference=str(raw))
+    return PriceInfo()
 
 
 @router.post("/api/generate", response_model=GenerateOut)
@@ -53,6 +63,8 @@ def generate(info: GenerateIn):
             selling_points=[str(x) for x in data.get("selling_points", [])][:6],
             story=str(data.get("story", "")).strip(),
             hashtags=[str(x) for x in data.get("hashtags", [])][:5],
+            price=_parse_price(data.get("price")),
+            value=[str(x) for x in data.get("value", [])][:4],
             video_script=[Scene(
                 shot=str(s.get("shot", f"分镜{i+1}")),
                 visual=str(s.get("visual", "")),

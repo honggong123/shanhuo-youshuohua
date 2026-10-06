@@ -18,6 +18,7 @@ const tabs = [
   { key: 'poster', label: '🖼️ 文创海报' },
   { key: 'audio', label: '🔊 语音介绍' },
   { key: 'script', label: '🎬 视频脚本' },
+  { key: 'price', label: '💰 价格价值' },
 ]
 
 const audioText = computed(() => {
@@ -130,17 +131,40 @@ const anyLoading = computed(() =>
         </div>
 
         <!-- 脚本 -->
-        <div v-if="tab === 'script'">
-          <div v-if="gen" class="space-y-3">
-            <div v-for="s in gen.video_script" :key="s.shot" class="rounded-2xl border border-stone-100 p-4">
-              <div class="flex items-center gap-2">
-                <span class="rounded-md bg-brand-600 px-2 py-0.5 text-[11px] font-bold text-white">{{ s.shot }}</span>
-                <span class="text-xs text-stone-500">🎬 {{ s.visual }}</span>
+        <div v-if=”tab === 'script'” class=”panel”>
+          <div v-if=”gen” class=”space-y-3”>
+            <div v-for=”s in gen.video_script” :key=”s.shot” class=”rounded-2xl border border-stone-100 p-4”>
+              <div class=”flex items-center gap-2”>
+                <span class=”rounded-md bg-brand-600 px-2 py-0.5 text-[11px] font-bold text-white”>{{ s.shot }}</span>
+                <span class=”text-xs text-stone-500”>🎬 {{ s.visual }}</span>
               </div>
-              <p class="mt-2 text-sm leading-relaxed text-stone-700">“{{ s.narration }}”</p>
+              <p class=”mt-2 text-sm leading-relaxed text-stone-700”>“{{ s.narration }}”</p>
             </div>
           </div>
-          <div v-else class="flex h-48 items-center justify-center rounded-2xl bg-stone-50 text-sm text-stone-400">脚本生成中…</div>
+          <div v-else class=”flex h-48 items-center justify-center rounded-2xl bg-stone-50 text-sm text-stone-400”>脚本生成中…</div>
+        </div>
+
+        <!-- 价格价值 -->
+        <div v-if=”tab === 'price'” class=”panel”>
+          <template v-if=”gen && gen.price”>
+            <div class=”grid grid-cols-2 gap-3”>
+              <div class=”rounded-2xl bg-harvest-400/10 p-4”>
+                <div class=”text-xs font-semibold text-harvest-600”>🏷️ 市场参考价</div>
+                <p class=”mt-2 text-sm leading-relaxed text-stone-700”>{{ gen.price.reference || '暂无' }}</p>
+              </div>
+              <div class=”rounded-2xl bg-brand-50 p-4”>
+                <div class=”text-xs font-semibold text-brand-700”>💡 定价建议</div>
+                <p class=”mt-2 text-sm leading-relaxed text-stone-700”>{{ gen.price.suggestion || '暂无' }}</p>
+              </div>
+            </div>
+            <ul class=”mt-4 space-y-2”>
+              <li v-for=”v in gen.value” :key=”v” class=”flex gap-2 text-sm text-stone-700”>
+                <span class=”text-harvest-500”>✦</span>{{ v }}
+              </li>
+            </ul>
+            <p class=”mt-3 text-[11px] text-stone-400”>* 价格为 AI 结合产品类目的估算参考，实际以当地行情为准</p>
+          </template>
+          <div v-else class=”flex h-48 items-center justify-center rounded-2xl bg-stone-50 text-sm text-stone-400”>价格与价值分析生成中…</div>
         </div>
       </div>
     </div>

@@ -28,12 +28,19 @@ class Scene(BaseModel):
     narration: str
 
 
+class PriceInfo(BaseModel):
+    reference: str = ""  # 市场参考价
+    suggestion: str = ""  # 定价建议
+
+
 class GenerateOut(BaseModel):
     title: str
     selling_points: list[str]
     story: str
     hashtags: list[str]
     video_script: list[Scene]
+    price: PriceInfo = PriceInfo()
+    value: list[str] = Field(default_factory=list)
     demo: bool = False
 
 
