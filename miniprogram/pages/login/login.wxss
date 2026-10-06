@@ -1,0 +1,73 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #336737, #3d8042 55%, #4d9950);
+  padding: 100rpx 40rpx 60rpx;
+  box-sizing: border-box;
+}
+
+.hero {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 50rpx;
+}
+
+.logo {
+  width: 130rpx;
+  height: 130rpx;
+  margin: 0 auto 20rpx;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 36rpx;
+  font-size: 64rpx;
+  line-height: 130rpx;
+}
+
+.hero-title {
+  font-size: 46rpx;
+  font-weight: 700;
+}
+
+.hero-sub {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  opacity: 0.85;
+}
+
+.form-card {
+  margin: 0;
+}
+
+.tab-bar {
+  display: flex;
+  background: #f5f5f4;
+  border-radius: 18rpx;
+  padding: 6rpx;
+  margin-bottom: 28rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 14rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #78716c;
+}
+
+.tab-active {
+  background: #ffffff;
+  color: #1c1917;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.submit {
+  margin-top: 16rpx;
+}
+
+.tip {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #a8a29e;
+  line-height: 1.6;
+}

@@ -1,0 +1,28 @@
+<view class="card">
+  <view class="title">🗂️ 生成历史</view>
+  <view class="subtitle" style="margin-top: 6rpx;">共 {{items.length}} 条记录 · 每次生成四件套后自动存档</view>
+
+  <view wx:if="{{error}}" class="error-box" style="margin-top: 20rpx;">⚠️ {{error}}</view>
+
+  <view wx:if="{{loading}}" class="empty">加载中…</view>
+
+  <block wx:elif="{{items.length}}">
+    <view wx:for="{{items}}" wx:key="id" class="item">
+      <image
+        wx:if="{{item.thumb}}"
+        class="thumb"
+        src="{{item.thumb}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="thumb thumb-empty">🍊</view>
+      <view class="item-body">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-title">{{item.title || '山货四件套'}}</view>
+        <view class="item-time">{{item.timeText}}</view>
+      </view>
+      <view class="item-del" data-id="{{item.id}}" bindtap="del">🗑</view>
+    </view>
+  </block>
+
+  <view wx:else class="empty">还没有生成记录，去「山货」页传一张照片试试 📷</view>
+</view>

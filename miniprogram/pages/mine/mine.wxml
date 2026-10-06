@@ -1,0 +1,44 @@
+<!-- 用户卡片 -->
+<view class="user-card">
+  <view class="avatar">👤</view>
+  <view class="user-info">
+    <view class="nickname">{{nickname}}</view>
+    <view class="username">账号：{{username}}</view>
+  </view>
+</view>
+
+<!-- 模型引擎 -->
+<view class="card">
+  <view class="title">🧠 模型引擎</view>
+  <view class="subtitle" style="margin-top: 6rpx;">当前：{{engine.active ? activeName : '演示模式'}}</view>
+  <view class="engines">
+    <text
+      wx:for="{{engine.providers}}"
+      wx:key="id"
+      class="chip {{item.id === engine.active ? 'chip-active' : (!item.available ? 'chip-disabled' : '')}}"
+      data-p="{{item}}"
+      bindtap="pickProvider"
+    >{{item.name}}{{item.id === engine.active ? ' ✓' : (!item.available ? '（未配置）' : '')}}</text>
+  </view>
+  <view class="mini-note">新厂商可在电脑端网页"＋ 接入大模型"里配置；识图/生图能力随厂商而定</view>
+</view>
+
+<!-- 关于 -->
+<view class="card">
+  <view class="title">🍊 关于</view>
+  <view class="about">
+    《山货有话说》—— AI 助农数字文创平台 v0.4
+    对应"乡村振兴·科创赋能"指定命题
+    全国大学生数字媒体科技作品及创意竞赛参赛作品
+  </view>
+  <view class="about-links">
+    <view>GitHub：github.com/honggong123/shanhuo-youshuohua</view>
+    <view>Gitee：gitee.com/jingdanxiushi/shanhuo-youshuohua</view>
+  </view>
+</view>
+
+<view class="card">
+  <button class="logout-btn" bindtap="logout">退出登录</button>
+</view>
+
+<view wx:if="{{error}}" class="error-box" style="margin: 0 24rpx;">⚠️ {{error}}</view>

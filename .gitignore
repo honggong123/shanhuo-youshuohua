@@ -13,3 +13,14 @@ frontend/node_modules/
 
 # 前端构建产物（交付时可保留，便于直接运行）
 # frontend/dist/
+
+# 工具会话产物（不上传）
+.mimosa/
+**/.mimosa/
+.zcode/
+**/.zcode/
+.zcodeignore
+
+# 系统文件
+Thumbs.db
+.DS_Store

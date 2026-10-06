@@ -1,0 +1,56 @@
+<view class="card">
+  <view class="title">🧭 云游乡村</view>
+  <view class="subtitle" style="margin-top: 6rpx;">已收录 {{villages.length}} 个村落 · 覆盖 {{provinces.length}} 个省区</view>
+
+  <!-- 省份筛选 -->
+  <scroll-view scroll-x class="chip-scroll">
+    <view class="chip-row">
+      <text
+        wx:for="{{provinceTabs}}"
+        wx:key="*this"
+        class="chip {{selectedProvince === item ? 'chip-active' : ''}}"
+        data-p="{{item}}"
+        bindtap="pickProvince"
+      >{{item}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 村落选择 -->
+  <scroll-view scroll-x class="chip-scroll">
+    <view class="chip-row">
+      <text
+        wx:for="{{villages}}"
+        wx:key="id"
+        wx:if="{{selectedProvince === '全部' || item.province === selectedProvince}}"
+        class="chip village-chip {{current === item.id ? 'chip-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="pickVillage"
+      >{{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <button class="btn-primary tell-btn" disabled="{{loadingStory}}" bindtap="tell">
+    {{loadingStory ? '讲解员准备中…' : '🎙️ 生成沉浸式讲解'}}
+  </button>
+
+  <view wx:if="{{error}}" class="error-box">⚠️ {{error}}</view>
+
+  <block wx:if="{{story}}">
+    <view class="story-box">{{story}}</view>
+    <view wx:if="{{demo}}" class="demo-note">演示文案 · 配置 Key 后由大模型实时生成</view>
+    <button wx:if="{{audioUrl}}" class="btn-primary play-btn" bindtap="playAudio">▶ 播放语音讲解</button>
+    <view wx:elif="{{loadingAudio}}" class="loading-line">语音合成中…</view>
+  </block>
+
+  <view class="ask-row">
+    <input
+      class="input ask-input"
+      placeholder="向讲解员提问，如：这里有什么好吃的？"
+      value="{{question}}"
+      bindinput="onInput"
+      confirm-type="send"
+      bindconfirm="ask"
+    />
+    <button class="ask-btn" disabled="{{loadingStory}}" bindtap="ask">提问</button>
+  </view>
+</view>

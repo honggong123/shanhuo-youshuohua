@@ -1,0 +1,61 @@
+.chip-scroll {
+  white-space: nowrap;
+  margin-top: 20rpx;
+}
+
+.chip-row {
+  display: inline-block;
+  padding-bottom: 6rpx;
+}
+
+.village-chip {
+  font-size: 26rpx;
+  padding: 14rpx 26rpx;
+}
+
+.tell-btn {
+  margin-top: 24rpx;
+}
+
+.story-box {
+  margin-top: 24rpx;
+  background: #f2f9f1;
+  border-radius: 18rpx;
+  padding: 24rpx;
+  font-size: 26rpx;
+  line-height: 1.9;
+  color: #44403c;
+}
+
+.demo-note {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  color: #d97f16;
+}
+
+.play-btn {
+  margin-top: 20rpx;
+}
+
+.ask-row {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 26rpx;
+  align-items: center;
+}
+
+.ask-input {
+  flex: 1;
+  margin-bottom: 0;
+  background: #fafaf9;
+}
+
+.ask-btn {
+  background: #292524;
+  color: #ffffff;
+  font-size: 26rpx;
+  border-radius: 18rpx;
+  padding: 0 30rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+}

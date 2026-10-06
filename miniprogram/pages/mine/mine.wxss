@@ -1,0 +1,73 @@
+.user-card {
+  background: linear-gradient(140deg, #336737, #4d9950);
+  margin: 20rpx 24rpx;
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  color: #ffffff;
+}
+
+.avatar {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  text-align: center;
+  line-height: 110rpx;
+  font-size: 54rpx;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.username {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.engines {
+  margin-top: 20rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.engines .chip {
+  margin: 0;
+}
+
+.mini-note {
+  margin-top: 18rpx;
+  font-size: 20rpx;
+  color: #a8a29e;
+  line-height: 1.6;
+}
+
+.about {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #57534e;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.about-links {
+  margin-top: 16rpx;
+  font-size: 20rpx;
+  color: #a8a29e;
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+.logout-btn {
+  background: #ffffff;
+  color: #dc2626;
+  border: 2rpx solid #fecaca;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+}

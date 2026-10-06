@@ -1,0 +1,97 @@
+<view class="hero">
+  <view class="hero-title">拍一张照片，AI 为山货写文案、画海报、配语音</view>
+  <view class="hero-sub">乡村振兴 · 科创赋能</view>
+</view>
+
+<!-- 第一步：上传 -->
+<view class="card">
+  <view class="step-title">① 上传山货照片</view>
+  <view wx:if="{{!photoPath}}" class="pick-area" bindtap="chooseImage">
+    <view class="pick-icon">📷</view>
+    <view class="pick-text">拍照或从相册选择</view>
+  </view>
+  <block wx:else>
+    <image class="preview" src="{{photoPath}}" mode="aspectFit" bindtap="chooseImage" />
+    <view class="row">
+      <button class="btn-ghost half" bindtap="chooseImage">🔄 重选</button>
+      <button class="btn-primary half" disabled="{{recLoading}}" bindtap="recognize">
+        {{recLoading ? '识别中…' : '🤖 开始 AI 识别'}}
+      </button>
+    </view>
+  </block>
+</view>
+
+<!-- 识别结果 + 四件套 -->
+<view class="card" wx:if="{{rec}}">
+  <view class="step-title">② AI 识别与创作</view>
+  <view class="rec-name">{{rec.name}}</view>
+  <view class="rec-meta">
+    <text class="rec-chip">{{rec.category}}</text>
+    <text class="rec-origin">📍 {{rec.origin}}</text>
+  </view>
+  <view class="rec-desc">{{rec.description}}</view>
+  <view class="hl-list">
+    <text wx:for="{{rec.highlights}}" wx:key="index" class="hl">✦ {{item}}</text>
+  </view>
+
+  <button
+    wx:if="{{!gen && !copyLoading}}"
+    class="btn-primary gen-btn"
+    bindtap="generateAll"
+  >✨ 一键生成四件套</button>
+  <view wx:elif="{{copyLoading}}" class="loading-line">AI 正在创作中，请稍候…</view>
+
+  <!-- Tabs -->
+  <view class="tabs">
+    <view class="tab-item {{tab === 'copy' ? 'tab-on' : ''}}" data-tab="copy" bindtap="switchTab">✍️ 文案</view>
+    <view class="tab-item {{tab === 'poster' ? 'tab-on' : ''}}" data-tab="poster" bindtap="switchTab">🖼️ 海报</view>
+    <view class="tab-item {{tab === 'audio' ? 'tab-on' : ''}}" data-tab="audio" bindtap="switchTab">🔊 语音</view>
+    <view class="tab-item {{tab === 'script' ? 'tab-on' : ''}}" data-tab="script" bindtap="switchTab">🎬 脚本</view>
+  </view>
+
+  <!-- 文案 -->
+  <view wx:if="{{tab === 'copy'}}" class="panel">
+    <block wx:if="{{gen}}">
+      <view class="gen-title">{{gen.title}}</view>
+      <view wx:for="{{gen.selling_points}}" wx:key="index" class="point">✔ {{item}}</view>
+      <view class="story">{{gen.story}}</view>
+      <view class="tags"><text wx:for="{{gen.hashtags}}" wx:key="index" class="tag">{{item}}</text></view>
+    </block>
+    <view wx:else class="loading-line">文案生成中…</view>
+  </view>
+
+  <!-- 海报 -->
+  <view wx:if="{{tab === 'poster'}}" class="panel">
+    <block wx:if="{{posterUrl}}">
+      <image class="poster" src="{{posterUrl}}" mode="widthFix" />
+      <button class="btn-ghost save-btn" bindtap="savePoster">⬇ 保存海报到相册</button>
+    </block>
+    <view wx:else class="loading-line">海报绘制中…</view>
+  </view>
+
+  <!-- 语音 -->
+  <view wx:if="{{tab === 'audio'}}" class="panel">
+    <block wx:if="{{audioUrl}}">
+      <button class="btn-primary play-btn" bindtap="playAudio">▶ 播放语音介绍</button>
+      <view class="story">{{gen ? gen.title + '。' + gen.story : ''}}</view>
+    </block>
+    <view wx:elif="{{audioLoading}}" class="loading-line">语音合成中…</view>
+    <view wx:elif="{{ttsError}}" class="error-box">⚠️ {{ttsError}}</view>
+  </view>
+
+  <!-- 脚本 -->
+  <view wx:if="{{tab === 'script'}}" class="panel">
+    <block wx:if="{{gen}}">
+      <view wx:for="{{gen.video_script}}" wx:key="index" class="scene">
+        <view class="scene-head">
+          <text class="scene-no">{{item.shot}}</text>
+          <text class="scene-visual">🎬 {{item.visual}}</text>
+        </view>
+        <view class="scene-narr">"{{item.narration}}"</view>
+      </view>
+    </block>
+    <view wx:else class="loading-line">脚本生成中…</view>
+  </view>
+</view>
+
+<view wx:if="{{error}}" class="error-box" style="margin: 0 24rpx;">⚠️ {{error}}</view>
