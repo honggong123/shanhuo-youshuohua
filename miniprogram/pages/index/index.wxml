@@ -28,6 +28,7 @@
   <view class="rec-meta">
     <text class="rec-chip">{{rec.category}}</text>
     <text class="rec-origin">📍 {{rec.origin}}</text>
+    <text wx:if="{{rec.demo}}" class="rec-demo">演示数据</text>
   </view>
   <view class="rec-desc">{{rec.description}}</view>
   <view class="hl-list">

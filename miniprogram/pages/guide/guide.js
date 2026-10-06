@@ -66,8 +66,14 @@ Page({
     this.setData({ current: e.currentTarget.dataset.id })
   },
 
+  stopAudio() {
+    if (this.audio && this.data.playing) this.audio.stop()
+    if (this.data.playing) this.setData({ playing: false })
+  },
+
   async tell() {
     if (!this.data.current) return
+    this.stopAudio()
     this.setData({ loadingStory: true, error: '', audioUrl: '', playing: false })
     try {
       const res = await api.guide(this.data.current)
@@ -86,6 +92,7 @@ Page({
   async ask() {
     const q = this.data.question.trim()
     if (!q) return
+    this.stopAudio()
     this.setData({ loadingStory: true, error: '', audioUrl: '', playing: false })
     try {
       const res = await api.guide(this.data.current, q)

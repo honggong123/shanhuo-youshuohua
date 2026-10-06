@@ -4,6 +4,7 @@ import uuid
 import edge_tts
 
 from .. import config
+from ..files import prune_dir
 
 GENERATED = config.GENERATED_DIR / "audio"
 MAX_LEN = 600
@@ -17,4 +18,5 @@ async def synthesize(text: str, voice: str = "") -> str:
     out = GENERATED / f"tts_{uuid.uuid4().hex[:10]}.mp3"
     communicate = edge_tts.Communicate(text, voice or config.TTS_VOICE)
     await communicate.save(str(out))
+    prune_dir(GENERATED, keep=300)
     return out

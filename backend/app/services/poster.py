@@ -106,7 +106,8 @@ def _ai_art(name: str, origin: str) -> Image.Image | None:
 
         client = OpenAI(api_key=config.IMG_API_KEY, base_url=config.IMG_BASE_URL, timeout=120)
         resp = client.images.generate(
-            model=config.IMG_MODEL, prompt=prompt, size="768x1344", n=1,
+            model=config.IMG_MODEL, prompt=prompt,
+            size=config.IMG_SIZE or "768x1344", n=1,
             response_format="b64_json",
         )
         b64 = getattr(resp.data[0], "b64_json", None)
@@ -182,4 +183,7 @@ def compose(image_b64: str, name: str, tagline: str, origin: str) -> tuple[Path,
 
     out = GENERATED / f"poster_{uuid.uuid4().hex[:10]}.jpg"
     base.convert("RGB").save(out, quality=90)
+    from ..files import prune_dir
+
+    prune_dir(GENERATED, keep=200)
     return out, ai

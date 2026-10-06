@@ -52,10 +52,13 @@ def _hash(password: str, salt_hex: str) -> str:
 
 def _new_token(user_id: int) -> str:
     token = secrets.token_urlsafe(32)
+    now = int(time.time())
     with get_conn() as c:
+        # 顺手清理过期令牌，防止表无限增长
+        c.execute("DELETE FROM tokens WHERE created_at < ?", (now - TOKEN_TTL,))
         c.execute(
             "INSERT INTO tokens(token, user_id, created_at) VALUES(?, ?, ?)",
-            (token, user_id, int(time.time())),
+            (token, user_id, now),
         )
     return token
 

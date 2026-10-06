@@ -22,6 +22,7 @@ PROVIDERS = {
         "text_model": "glm-4-flash",
         "vision_model": "glm-4v-flash",
         "img_model": "cogview-3-flash",
+        "img_size": "768x1344",
         "note": "文本/识图/生图三个模型全部免费，学生团队推荐",
     },
     "deepseek": {
@@ -62,6 +63,7 @@ PROVIDERS = {
         "text_model": "gpt-4o-mini",
         "vision_model": "gpt-4o-mini",
         "img_model": "dall-e-3",
+        "img_size": "1024x1792",
         "note": "能力全面，需海外网络环境",
     },
 }

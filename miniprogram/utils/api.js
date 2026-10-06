@@ -22,6 +22,7 @@ function request(path, method = 'GET', data = null, auth = true) {
       method,
       data: data || undefined,
       header,
+      timeout: 120000, // 大模型生成较慢，放宽超时
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data)

@@ -65,6 +65,7 @@ VISION_MODEL = ""  # 空串表示该厂商不支持识图
 IMG_API_KEY = ""
 IMG_BASE_URL = ""
 IMG_MODEL = ""  # 空串表示该厂商不支持生图
+IMG_SIZE = ""  # 生图尺寸（各厂商支持的档位不同）
 
 
 def _apply(pid: str | None) -> None:
@@ -72,14 +73,14 @@ def _apply(pid: str | None) -> None:
     global ACTIVE_PROVIDER, DEMO_MODE
     global LLM_API_KEY, LLM_BASE_URL, LLM_MODEL
     global VISION_API_KEY, VISION_BASE_URL, VISION_MODEL
-    global IMG_API_KEY, IMG_BASE_URL, IMG_MODEL
+    global IMG_API_KEY, IMG_BASE_URL, IMG_MODEL, IMG_SIZE
 
     if pid is None or pid not in KEYS:
         ACTIVE_PROVIDER = None
         DEMO_MODE = True
         LLM_API_KEY = LLM_BASE_URL = LLM_MODEL = ""
         VISION_API_KEY = VISION_BASE_URL = VISION_MODEL = ""
-        IMG_API_KEY = IMG_BASE_URL = IMG_MODEL = ""
+        IMG_API_KEY = IMG_BASE_URL = IMG_MODEL = IMG_SIZE = ""
         return
 
     p = PROVIDERS[pid]
@@ -94,6 +95,7 @@ def _apply(pid: str | None) -> None:
     IMG_API_KEY = KEYS[pid]
     IMG_BASE_URL = p["base_url"]
     IMG_MODEL = p["img_model"] or ""
+    IMG_SIZE = p.get("img_size") or ""
 
 
 _apply(_default_pid)

@@ -36,10 +36,34 @@ Page({
       mediaType: ['image'],
       sourceType: ['album', 'camera'],
       success: (res) => {
-        const path = res.tempFiles[0].tempFilePath
-        this.setData({ photoPath: path, rec: null, gen: null, posterUrl: '', audioUrl: '', error: '' })
+        const raw = res.tempFiles[0].tempFilePath
+        // 压缩后再上传：相机原图动辄好几 MB，base64 后请求又慢又容易失败
+        wx.compressImage({
+          src: raw,
+          quality: 60,
+          success: (c) => this.setPhoto(c.tempFilePath),
+          fail: () => this.setPhoto(raw),
+        })
       },
     })
+  },
+
+  setPhoto(path) {
+    this.stopAudio()
+    this.setData({
+      photoPath: path,
+      rec: null,
+      gen: null,
+      posterUrl: '',
+      audioUrl: '',
+      error: '',
+      playing: false,
+    })
+  },
+
+  stopAudio() {
+    if (this.audio && this.data.playing) this.audio.stop()
+    if (this.data.playing) this.setData({ playing: false })
   },
 
   readFileB64(path) {
@@ -78,6 +102,7 @@ Page({
       origin: rec.origin,
       highlights: rec.highlights,
     }
+    this.stopAudio()
     this.setData({ copyLoading: true, posterLoading: true, audioLoading: true, ttsError: '', error: '', playing: false })
 
     const b64 = await this.readFileB64(this.data.photoPath).catch(() => '')
@@ -114,6 +139,13 @@ Page({
         .catch(() => {})
     }
     this.setData({ copyLoading: false, posterLoading: false, audioLoading: false })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '山货有话说 · AI 让每一份山货开口说话',
+      path: '/pages/index/index',
+    }
   },
 
   // ---- 语音播放 / 暂停 ----
