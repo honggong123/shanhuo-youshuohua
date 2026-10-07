@@ -66,23 +66,11 @@ Page({
     if (this.data.playing) this.setData({ playing: false })
   },
 
-  readFileB64(path) {
-    return new Promise((resolve, reject) => {
-      wx.getFileSystemManager().readFile({
-        filePath: path,
-        encoding: 'base64',
-        success: (res) => resolve(res.data),
-        fail: () => reject(new Error('图片读取失败')),
-      })
-    })
-  },
-
   // ---- 第二步：AI 识别 ----
   async recognize() {
     this.setData({ recLoading: true, error: '' })
     try {
-      const b64 = await this.readFileB64(this.data.photoPath)
-      const rec = await api.recognize(b64)
+      const rec = await api.recognize(this.data.photoPath)
       this.setData({ rec, recLoading: false })
     } catch (e) {
       this.setData({ error: e.message, recLoading: false })
@@ -105,11 +93,9 @@ Page({
     this.stopAudio()
     this.setData({ copyLoading: true, posterLoading: true, audioLoading: true, ttsError: '', error: '', playing: false })
 
-    const b64 = await this.readFileB64(this.data.photoPath).catch(() => '')
-
     const [copySettled, posterSettled] = await Promise.allSettled([
       api.generate(info),
-      api.poster({ image: b64, name: rec.name, origin: rec.origin, tagline: '' }),
+      api.poster(this.data.photoPath, { name: rec.name, origin: rec.origin, tagline: '' }),
     ])
 
     if (copySettled.status === 'fulfilled') {

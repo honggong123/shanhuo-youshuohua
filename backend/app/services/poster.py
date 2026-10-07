@@ -15,13 +15,37 @@ from .. import config
 W, H = 900, 1200
 GENERATED = config.GENERATED_DIR / "poster"
 
+# 中文字体候选（按平台顺序尝试）。
+# Linux 一档是云托管/云服务器必需的：slim 镜像默认不含中文字体，
+# 缺字体会让海报上的中文变成方块（tofu）。deploy/cloudrun.Dockerfile 已装 fonts-noto-cjk。
 BOLD_CANDIDATES = [
+    # Linux
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    # macOS
+    "/System/Library/Fonts/PingFang.ttc",
+    "/System/Library/Fonts/STHeiti Medium.ttc",
+    # Windows
     r"C:\Windows\Fonts\msyhbd.ttc",
-    r"C:\Windows\Fonts\msyh.ttc",
     r"C:\Windows\Fonts\simhei.ttf",
+]
+REGULAR_CANDIDATES = [
+    # Linux
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    # macOS
+    "/System/Library/Fonts/PingFang.ttc",
+    "/System/Library/Fonts/STHeiti Light.ttc",
+    # Windows
+    r"C:\Windows\Fonts\msyh.ttc",
     r"C:\Windows\Fonts\simsun.ttc",
 ]
-REGULAR_CANDIDATES = BOLD_CANDIDATES[1:]
+
+_font_warned = False
 
 THEMES = [
     {"deep": (46, 94, 62), "mid": (94, 158, 94), "light": (244, 246, 230)},
@@ -31,12 +55,17 @@ THEMES = [
 
 
 def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+    global _font_warned
     for p in (BOLD_CANDIDATES if bold else REGULAR_CANDIDATES):
         if Path(p).exists():
             try:
                 return ImageFont.truetype(p, size)
             except OSError:
                 continue
+    if not _font_warned:
+        _font_warned = True
+        print("[warn] 未找到中文字体，海报中文可能显示为方块。"
+              "容器内请安装 fonts-noto-cjk（见 deploy/cloudrun.Dockerfile）。")
     return ImageFont.load_default(size)
 
 
@@ -110,10 +139,21 @@ def _ai_art(name: str, origin: str) -> Image.Image | None:
             size=config.IMG_SIZE or "768x1344", n=1,
             response_format="b64_json",
         )
-        b64 = getattr(resp.data[0], "b64_json", None)
-        if not b64:
-            return None
-        return Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB")
+        item = resp.data[0]
+
+        # OpenAI 系返回 b64_json；智谱 CogView 等会**静默忽略** response_format 只给 url，
+        # 因此必须两条路都支持，否则 AI 底图会无声无息地降级成本地模板。
+        b64 = getattr(item, "b64_json", None)
+        if b64:
+            return Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB")
+
+        url = getattr(item, "url", None)
+        if url:
+            import httpx
+
+            raw = httpx.get(url, timeout=120).content
+            return Image.open(io.BytesIO(raw)).convert("RGB")
+        return None
     except Exception:
         return None
 

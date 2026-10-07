@@ -1,17 +1,29 @@
-"""文创海报生成接口。"""
-from fastapi import APIRouter, HTTPException
+"""文创海报生成接口。
 
-from ..schemas import PosterIn, PosterOut
+请求体兼容 multipart/form-data（image 文件 + name/tagline/origin 文本字段）
+与 application/json（image 为 base64），见 files.read_image_and_form。
+"""
+import base64
+
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.concurrency import run_in_threadpool
+
+from ..files import read_image_and_form
+from ..schemas import PosterOut
 from ..services import poster
 
 router = APIRouter()
 
 
 @router.post("/api/poster", response_model=PosterOut)
-def make_poster(body: PosterIn):
+async def make_poster(request: Request):
+    raw, fields = await read_image_and_form(request)
+    name = (fields.get("name") or "").strip() or "山货"
+    tagline = (fields.get("tagline") or "").strip()
+    origin = (fields.get("origin") or "").strip()
+    b64 = base64.b64encode(raw).decode()
     try:
-        path, ai = poster.compose(body.image, body.name.strip() or "山货",
-                                  body.tagline.strip(), body.origin.strip())
+        path, ai = await run_in_threadpool(poster.compose, b64, name, tagline, origin)
     except HTTPException:
         raise
     except Exception as e:

@@ -71,9 +71,9 @@ npm run build
 
 | 方法 | 路径 | 功能 | 关键参数 |
 |---|---|---|---|
-| POST | `/api/recognize` | 农产品识图建档 | `image`: base64/dataURL |
+| POST | `/api/recognize` | 农产品识图建档 | 支持 multipart（`image` 文件字段，小程序走这条）或 JSON `image`: base64/dataURL |
 | POST | `/api/generate` | 卖点文案 + 短视频脚本 | `name/category/origin/highlights` |
-| POST | `/api/poster` | AIGC 文创海报 | `image/name/tagline/origin` |
+| POST | `/api/poster` | AIGC 文创海报 | 同上，multipart（`image` + `name/tagline/origin`）或 JSON |
 | POST | `/api/tts` | 语音介绍（mp3） | `text` |
 | GET | `/api/villages` | 内置村落列表（29 个，覆盖 24 省区） | — |
 | POST | `/api/guide` | 数字讲解员讲解/问答 | `village_id`, `question?` |

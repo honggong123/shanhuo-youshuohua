@@ -20,6 +20,10 @@ frontend/node_modules/
 .zcode/
 **/.zcode/
 .zcodeignore
+.workbuddy-ai/
+
+# 可再生的部署产物（用 deploy/build_cloudrun_zip.py 重新生成）
+deploy/*.zip
 
 # 系统文件
 Thumbs.db
