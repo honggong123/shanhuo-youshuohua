@@ -11,11 +11,13 @@ Page({
   },
 
   onShow() {
-    // 已有令牌则直接进入主应用
+    // 已有令牌则直接进入主应用；仅在令牌确实失效(401)时清除，网络抖动不清
     if (api.getToken()) {
       api.me()
         .then(() => wx.reLaunch({ url: '/pages/index/index' }))
-        .catch(() => api.setToken(''))
+        .catch((err) => {
+          if (err && err.status === 401) api.setToken('')
+        })
     }
   },
 

@@ -29,9 +29,14 @@ Page({
         error: '',
       })
     } catch (e) {
-      // 令牌失效则回到登录页
-      api.setToken('')
-      wx.reLaunch({ url: '/pages/login/login' })
+      if (e && e.status === 401) {
+        // 令牌失效才登出
+        api.setToken('')
+        wx.reLaunch({ url: '/pages/login/login' })
+      } else {
+        // 网络抖动等：只提示，保留登录态，避免误登出
+        this.setData({ error: e.message || '加载失败，请检查网络' })
+      }
     }
   },
 

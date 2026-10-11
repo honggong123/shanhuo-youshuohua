@@ -34,6 +34,13 @@ async function authedGet(url) {
   return data
 }
 
+async function authedDelete(url) {
+  const res = await fetch(url, { method: 'DELETE', headers: authHeaders() })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.detail || `请求失败 (${res.status})`)
+  return data
+}
+
 // dataURL -> Blob：图片走 multipart 二进制通道，避免 base64 撑大请求体
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',')
@@ -72,6 +79,7 @@ export const api = {
   providers: () => authedGet('/api/providers'),
   switchProvider: (provider_id) => post('/api/providers/switch', { provider_id }),
   connectProvider: (provider_id, api_key) => post('/api/providers/connect', { provider_id, api_key }),
+  deleteProviderKey: (provider_id) => authedDelete(`/api/providers/key/${provider_id}`),
 
   register: (username, password, nickname) => post('/api/auth/register', { username, password, nickname }),
   login: (username, password) => post('/api/auth/login', { username, password }),
@@ -79,9 +87,5 @@ export const api = {
   me: () => authedGet('/api/auth/me'),
   history: () => authedGet('/api/auth/history'),
   addHistory: (name, title, poster_url) => post('/api/auth/history', { name, title, poster_url }),
-  deleteHistory: (id) =>
-    fetch(`/api/auth/history/${id}`, { method: 'DELETE', headers: authHeaders() }).then((r) => {
-      if (!r.ok) throw new Error(`删除失败 (${r.status})`)
-      return r.json()
-    }),
+  deleteHistory: (id) => authedDelete(`/api/auth/history/${id}`),
 }

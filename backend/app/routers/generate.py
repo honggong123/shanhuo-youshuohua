@@ -63,14 +63,14 @@ def generate(info: GenerateIn, user: dict | None = Depends(optional_user)):
     else:
         price_block = "该产品暂无已核实行情，请按常识给出保守的价格区间，并在 reference 末尾注明“（估算参考）”。"
     try:
-        text = llm.chat([
+        text = llm.chat_with_fallback([
             {"role": "system", "content": "你是农产品营销文案专家，只输出 JSON。"},
             {"role": "user", "content": PROMPT.format(
                 price_block=price_block,
                 name=info.name, category=info.category or "农产品",
                 origin=info.origin or "中国乡村", highlights="、".join(info.highlights) or "优质山货",
             )},
-        ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model)
+        ], creds)
         data = llm.extract_json(text)
         return GenerateOut(
             title=str(data.get("title", info.name)).strip(),

@@ -3,6 +3,14 @@ const { BASE_URL } = require('../config')
 
 const TOKEN_KEY = 'shanhuo_token'
 
+// 带状态码的错误：status=0 表示网络层失败（非服务端返回），
+// 调用方可据此区分「令牌失效(401)」与「网络抖动」，避免误登出。
+function apiError(message, status) {
+  const err = new Error(message)
+  err.status = status
+  return err
+}
+
 function getToken() {
   return wx.getStorageSync(TOKEN_KEY) || ''
 }
@@ -28,11 +36,11 @@ function request(path, method = 'GET', data = null, auth = true) {
           resolve(res.data)
         } else {
           const msg = (res.data && res.data.detail) || `请求失败 (${res.statusCode})`
-          reject(new Error(msg))
+          reject(apiError(msg, res.statusCode))
         }
       },
       fail() {
-        reject(new Error('网络请求失败，请确认电脑端服务已启动（python run.py）'))
+        reject(apiError('网络请求失败，请确认电脑端服务已启动（python run.py）', 0))
       },
     })
   })
@@ -62,11 +70,11 @@ function upload(path, filePath, formData, auth = true) {
           resolve(data)
         } else {
           const msg = (data && data.detail) || `请求失败 (${res.statusCode})`
-          reject(new Error(msg))
+          reject(apiError(msg, res.statusCode))
         }
       },
       fail() {
-        reject(new Error('网络请求失败，请检查 config.js 里的后端地址与网络连接'))
+        reject(apiError('网络请求失败，请检查 config.js 里的后端地址与网络连接', 0))
       },
     })
   })

@@ -124,43 +124,46 @@ def _text_shadow(d, pos, text: str, font, fill, shadow=(0, 0, 0, 120), off=3):
 
 
 def _ai_art(name: str, origin: str, creds=None) -> Image.Image | None:
-    """生成 AI 底图。creds 为按账号解析出的凭据；不传则用部署方默认配置。"""
-    key = creds.img_key if creds else config.IMG_API_KEY
-    model = creds.img_model if creds else config.IMG_MODEL
-    base = creds.img_base if creds else config.IMG_BASE_URL
-    size = (creds.img_size if creds else config.IMG_SIZE) or "768x1344"
-    if not key or not model:
-        return None
+    """生成 AI 底图。creds 为按账号解析出的凭据；不传则用部署方默认配置。
+
+    按凭据链尝试（用户私有 → 部署方默认），全部失败返回 None（改用本地模板）。
+    """
+    if creds is None:
+        creds = config.default_creds()
     prompt = (
         f"中国风文创宣传海报背景插画，主体是{name}，{origin}的乡土元素，"
         "国潮插画风格，柔和暖色调，大量留白构图，画面纯净无任何文字无水印，竖版"
     )
-    try:
-        from openai import OpenAI
+    from openai import OpenAI
 
-        client = OpenAI(api_key=key, base_url=base, timeout=120)
-        resp = client.images.generate(
-            model=model, prompt=prompt,
-            size=size, n=1,
-            response_format="b64_json",
-        )
-        item = resp.data[0]
+    for c in config.creds_chain(creds):
+        if not c.img_key or not c.img_model:
+            continue
+        try:
+            client = OpenAI(api_key=c.img_key, base_url=c.img_base, timeout=120)
+            resp = client.images.generate(
+                model=c.img_model, prompt=prompt,
+                size=c.img_size or "768x1344", n=1,
+                response_format="b64_json",
+            )
+            item = resp.data[0]
 
-        # OpenAI 系返回 b64_json；智谱 CogView 等会**静默忽略** response_format 只给 url，
-        # 因此必须两条路都支持，否则 AI 底图会无声无息地降级成本地模板。
-        b64 = getattr(item, "b64_json", None)
-        if b64:
-            return Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB")
+            # OpenAI 系返回 b64_json；智谱 CogView 等会**静默忽略** response_format 只给 url，
+            # 因此必须两条路都支持，否则 AI 底图会无声无息地降级成本地模板。
+            b64 = getattr(item, "b64_json", None)
+            if b64:
+                return Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB")
 
-        url = getattr(item, "url", None)
-        if url:
-            import httpx
+            url = getattr(item, "url", None)
+            if url:
+                import httpx
 
-            raw = httpx.get(url, timeout=120).content
-            return Image.open(io.BytesIO(raw)).convert("RGB")
-        return None
-    except Exception:
-        return None
+                raw = httpx.get(url, timeout=120).content
+                return Image.open(io.BytesIO(raw)).convert("RGB")
+            return None
+        except Exception:
+            continue  # 该凭据不可用 → 尝试链上的下一个
+    return None
 
 
 def compose(image_b64: str, name: str, tagline: str, origin: str, creds=None) -> tuple[Path, bool]:

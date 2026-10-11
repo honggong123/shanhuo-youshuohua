@@ -46,11 +46,11 @@ def guide(body: GuideIn, user: dict | None = Depends(optional_user)):
                     "配置大模型 API Key 后，我可以详细为你解答。")
         else:
             try:
-                text = llm.chat([
+                text = llm.chat_with_fallback([
                     {"role": "system", "content": "你是亲切的乡村文旅讲解员，回答简短口语化。"},
                     {"role": "user", "content": QA_PROMPT.format(
                         name=v["name"], province=v["province"], intro=v["intro"], question=body.question)},
-                ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model, temperature=0.7)
+                ], creds, temperature=0.7)
             except Exception:
                 text = f"关于{v['name']}：{v['intro']}"
                 live = False
@@ -59,12 +59,12 @@ def guide(body: GuideIn, user: dict | None = Depends(optional_user)):
             text = demo_story(v)
         else:
             try:
-                text = llm.chat([
+                text = llm.chat_with_fallback([
                     {"role": "system", "content": "你是专业的乡村文旅讲解员。"},
                     {"role": "user", "content": STORY_PROMPT.format(
                         name=v["name"], province=v["province"], intro=v["intro"],
                         tags="、".join(v["tags"]))},
-                ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model, temperature=0.8)
+                ], creds, temperature=0.8)
             except Exception:
                 text = demo_story(v)
                 live = False

@@ -13,6 +13,7 @@ const selectedId = ref('')
 const apiKey = ref('')
 const showKey = ref(false)
 const connecting = ref(false)
+const removing = ref(false)
 const error = ref('')
 
 const DEFAULT_ID = 'glm'
@@ -34,6 +35,7 @@ watch(
 )
 
 const selected = computed(() => props.providers.find((p) => p.id === selectedId.value))
+const myProviders = computed(() => props.providers.filter((p) => p.mine))
 
 async function connect() {
   if (!apiKey.value.trim()) {
@@ -50,6 +52,19 @@ async function connect() {
     error.value = e.message
   } finally {
     connecting.value = false
+  }
+}
+
+async function removeKey(pid) {
+  removing.value = true
+  error.value = ''
+  try {
+    const snap = await api.deleteProviderKey(pid)
+    emit('connected', snap)  // 同步刷新引擎状态
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    removing.value = false
   }
 }
 </script>
@@ -88,6 +103,27 @@ async function connect() {
           <span v-if="p.id === activeId" class="ml-1 rounded bg-brand-600 px-1 py-0.5 text-[10px] text-white">使用中</span>
           <p class="mt-0.5 text-[10px] leading-tight text-stone-400">{{ p.mine ? '我的 Key' : p.available ? '平台默认可用' : p.vision_model || p.img_model ? '支持识图' : '仅文本' }}</p>
         </button>
+      </div>
+
+      <!-- 我已接入的 Key（可移除） -->
+      <div v-if="myProviders.length" class="mt-4">
+        <p class="text-xs font-semibold text-stone-500">我已接入的 Key</p>
+        <div class="mt-2 space-y-1.5">
+          <div
+            v-for="p in myProviders"
+            :key="p.id"
+            class="flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2"
+          >
+            <span class="text-sm text-stone-700">{{ p.name }}</span>
+            <button
+              class="shrink-0 rounded-lg px-2 py-1 text-xs font-medium text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+              :disabled="removing"
+              @click="removeKey(p.id)"
+            >
+              移除
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Key 输入 -->

@@ -28,6 +28,26 @@ def chat(messages: list[dict], *, model: str | None = None, api_key: str | None 
     return resp.choices[0].message.content or ""
 
 
+def chat_with_fallback(messages: list[dict], creds, *, temperature: float = 0.8) -> str:
+    """按凭据链调用（用户私有 → 部署方默认），全部失败时抛最后一个异常。
+
+    这样用户自己接入的 Key 失效/欠费时，仍能回退到平台默认，而不是直接掉到演示数据。
+    """
+    last: Exception | None = None
+    for c in config.creds_chain(creds):
+        try:
+            return chat(
+                messages,
+                model=c.llm_model,
+                api_key=c.llm_key,
+                base_url=c.llm_base,
+                temperature=temperature,
+            )
+        except Exception as e:  # 含 LLMUnavailable / 网络 / 厂商报错
+            last = e
+    raise last if last is not None else LLMUnavailable("无可用凭据")
+
+
 def extract_json(text: str) -> dict:
     """从模型输出中提取第一个 JSON 对象（容忍 ```json 围栏）。"""
     text = re.sub(r"```(?:json)?", "", text).strip()

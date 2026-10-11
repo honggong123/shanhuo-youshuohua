@@ -223,6 +223,34 @@ def default_creds() -> Creds:
     return creds_for_user(None)
 
 
+def fallback_creds(creds: Creds) -> Creds | None:
+    """用户私有凭据不可用时的兜底（部署方默认）；无需兜底时返回 None。
+
+    仅当「当前不是演示模式」且「与部署方默认凭据不同」时才值得回退。
+    """
+    if creds.demo:
+        return None
+    base = default_creds()
+    if base.demo:
+        return None
+    if (base.llm_key, base.vision_key, base.img_key) == (
+        creds.llm_key,
+        creds.vision_key,
+        creds.img_key,
+    ):
+        return None  # 本来就用的是默认凭据，重试无意义
+    return base
+
+
+def creds_chain(creds: Creds) -> list[Creds]:
+    """凭据尝试顺序：用户私有 → 部署方默认（去重）。
+
+    用于"用户自己的 Key 失效/欠费时，不至于直接掉到演示数据"。
+    """
+    fb = fallback_creds(creds)
+    return [creds, fb] if fb else [creds]
+
+
 def providers_for_user(user_id: int | None) -> list[dict]:
     """厂商列表（按账号视角）：available = 自己有 Key 或部署方有 Key。"""
     ukeys: set[str] = set()
@@ -288,4 +316,17 @@ def set_user_provider(user_id: int, pid: str) -> dict:
     if pid not in db.user_keys(user_id) and pid not in KEYS:
         raise PermissionError(f"厂商 {pid} 未配置 API Key，请先接入你自己的 Key")
     db.set_user_active_provider(user_id, pid)
+    return snapshot_for_user(user_id)
+
+
+def remove_user_key(user_id: int, pid: str) -> dict:
+    """移除【当前账号】在某厂商下的私有 Key（可撤销误接入的 Key）。"""
+    if pid not in PROVIDERS:
+        raise KeyError(pid)
+    from . import db
+
+    db.delete_user_key(user_id, pid)
+    # 偏好若指向已删除的厂商，清空它，避免悬空指向
+    if db.user_active_provider(user_id) == pid:
+        db.set_user_active_provider(user_id, "")
     return snapshot_for_user(user_id)

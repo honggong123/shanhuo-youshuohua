@@ -82,3 +82,12 @@ def connect_provider(body: ConnectIn, user: dict = Depends(current_user)):
         return config.register_user_key(user["id"], body.provider_id, body.api_key)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/api/providers/key/{provider_id}")
+def delete_provider_key(provider_id: str, user: dict = Depends(current_user)):
+    """移除当前账号在某厂商下的私有 Key（撤销误接入）。"""
+    try:
+        return config.remove_user_key(user["id"], provider_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"未知厂商：{provider_id}")
