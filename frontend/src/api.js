@@ -69,7 +69,7 @@ export const api = {
   tts: (text) => post('/api/tts', { text }),
   villages: () => fetch('/api/villages').then((r) => r.json()),
   guide: (village_id, question = '') => post('/api/guide', { village_id, question }),
-  providers: () => fetch('/api/providers').then((r) => r.json()),
+  providers: () => authedGet('/api/providers'),
   switchProvider: (provider_id) => post('/api/providers/switch', { provider_id }),
   connectProvider: (provider_id, api_key) => post('/api/providers/connect', { provider_id, api_key }),
 

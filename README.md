@@ -63,7 +63,7 @@ npm run build
 # 访问 http://127.0.0.1:8000 即可
 ```
 
-**获取免费 API Key（可选）**：最方便的方式是直接在网页上点 **"＋ 接入大模型"** 按钮——选厂商、粘贴 Key、验证连接，一步到位（Key 保存在本机 `backend/.env`，重启后仍生效）。也可以手动注册 [智谱开放平台](https://open.bigmodel.cn) 后把 Key 填入 `backend/.env` 的 `GLM_API_KEY`。
+**获取免费 API Key（可选）**：最方便的方式是直接在网页上点 **"＋ 接入大模型"** 按钮——选厂商、粘贴 Key、验证连接，一步到位（**Key 仅绑定你的账号，其他账号无法使用**）。也可以由部署方手动注册 [智谱开放平台](https://open.bigmodel.cn) 后把 Key 填入 `backend/.env` 的 `GLM_API_KEY`，作为**平台默认 Key**（未接入自己 Key 的用户共用）。
 `glm-4-flash`、`glm-4v-flash`、`cogview-3-flash` 三个模型**全部免费**，整套真实 AI 能力零成本。
 也支持 DeepSeek / 通义千问 / Kimi / OpenAI——同样通过按钮或 `.env` 接入，之后在"模型引擎"栏一键切换（默认 `auto` 自动选用第一个有 Key 的厂商）。
 
