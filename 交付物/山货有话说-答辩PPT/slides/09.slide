@@ -1,0 +1,80 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 62, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 30 }}>
+            <Box style={{ width: 6, height: 32, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>核心链路：一张照片进去，五件套出来</Text>
+        </Box>
+
+        {/* 金句条 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 40, justifyContent: 'center' }}>
+            <Box style={{ width: 6, height: 6, background: '#D9534F', borderRadius: 3 }} />
+            <Text style={{ fontSize: 22, color: '#0E3F8C', fontWeight: 'bold', letterSpacing: 1 }}>
+                从按下快门到可发布素材，全程约 30 秒
+            </Text>
+        </Box>
+
+        {/* 时间轴 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', position: 'relative' }}>
+
+            {/* 步骤 1 */}
+            <Box style={{ width: 190, flexDirection: 'column', alignItems: 'center' }}>
+                <Box style={{ width: 62, height: 62, background: '#1E4FA8', borderRadius: 31, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, color: '#FFFFFF', fontWeight: 'bold' }}>1</Text>
+                </Box>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1A2230', marginTop: 16, marginBottom: 8 }}>拍照上传</Text>
+                <Text style={{ fontSize: 14, color: '#6B7A90', textAlign: 'center', lineHeight: 1.6 }}>手机拍摄山货实拍图，一键提交</Text>
+            </Box>
+
+            <Text style={{ fontSize: 22, color: '#C8D3E2', marginTop: 20 }}>→</Text>
+
+            {/* 步骤 2 */}
+            <Box style={{ width: 190, flexDirection: 'column', alignItems: 'center' }}>
+                <Box style={{ width: 62, height: 62, background: '#2E6FC7', borderRadius: 31, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, color: '#FFFFFF', fontWeight: 'bold' }}>2</Text>
+                </Box>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1A2230', marginTop: 16, marginBottom: 8 }}>AI 识图建档</Text>
+                <Text style={{ fontSize: 14, color: '#6B7A90', textAlign: 'center', lineHeight: 1.6 }}>多模态模型识别品类、品相、产地</Text>
+            </Box>
+
+            <Text style={{ fontSize: 22, color: '#C8D3E2', marginTop: 20 }}>→</Text>
+
+            {/* 步骤 3 */}
+            <Box style={{ width: 190, flexDirection: 'column', alignItems: 'center' }}>
+                <Box style={{ width: 62, height: 62, background: '#3D7BD9', borderRadius: 31, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, color: '#FFFFFF', fontWeight: 'bold' }}>3</Text>
+                </Box>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1A2230', marginTop: 16, marginBottom: 8 }}>并行生成</Text>
+                <Text style={{ fontSize: 14, color: '#6B7A90', textAlign: 'center', lineHeight: 1.6 }}>文案 ‖ 海报 ‖ 语音 ‖ 脚本 ‖ 定价</Text>
+            </Box>
+
+            <Text style={{ fontSize: 22, color: '#C8D3E2', marginTop: 20 }}>→</Text>
+
+            {/* 步骤 4 */}
+            <Box style={{ width: 190, flexDirection: 'column', alignItems: 'center' }}>
+                <Box style={{ width: 62, height: 62, background: '#0E3F8C', borderRadius: 31, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, color: '#FFFFFF', fontWeight: 'bold' }}>4</Text>
+                </Box>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1A2230', marginTop: 16, marginBottom: 8 }}>五件套交付</Text>
+                <Text style={{ fontSize: 14, color: '#6B7A90', textAlign: 'center', lineHeight: 1.6 }}>打包可直接发布、转发、下载</Text>
+            </Box>
+
+        </Box>
+
+        {/* 并行生成展开说明 */}
+        <Box style={{ background: '#F5F8FD', borderRadius: 12, paddingTop: 22, paddingBottom: 22, paddingLeft: 30, paddingRight: 30, marginTop: 44 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                <Text style={{ fontSize: 16, color: '#0E3F8C', fontWeight: 'bold' }}>第 3 步为什么快：异步并发编排</Text>
+            </Box>
+            <Text style={{ fontSize: 16, color: '#4A5568', lineHeight: 1.7 }}>
+                五个生成任务相互独立，后端以异步任务并发调度，总耗时取决于最慢的一项而非累加，
+                因此五件套的整体生成时间与单件基本持平。
+            </Text>
+        </Box>
+
+    </Box>
+</Slide>

@@ -2,12 +2,22 @@
 
 @theme {
   --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+
+  /* 品牌绿：补齐 200/300/400/800
+     （原先只定义了 50/100/500/600/700/900，导致 border-brand-300、text-brand-800
+      等类名取不到颜色，虚线框会退回 currentColor 变成深灰） */
   --color-brand-50: #f2f9f1;
   --color-brand-100: #dff0dc;
+  --color-brand-200: #c2e0be;
+  --color-brand-300: #9ccb98;
+  --color-brand-400: #71b173;
   --color-brand-500: #4d9950;
   --color-brand-600: #3d8042;
   --color-brand-700: #336737;
+  --color-brand-800: #2b5630;
   --color-brand-900: #1e3f22;
+
+  /* 丰收金：用于强调、装饰点缀 */
   --color-harvest-400: #f5b04a;
   --color-harvest-500: #ee9d2b;
   --color-harvest-600: #d97f16;
@@ -17,15 +27,181 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ============================================================
+   全局背景（三层结构）
+   第 1 层 body 背景：暖白渐变 + 三处品牌色/丰收色光晕，固定不随滚动
+   第 2 层 body::before：纸纹点阵，顶部清晰、向下淡出，避免喧宾夺主
+   第 3 层 #app：正文内容，位于最上层
+   ============================================================ */
 body {
-  @apply bg-stone-100 text-stone-800 font-sans antialiased;
+  min-height: 100vh;
+  color: #292524;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background-color: #f4f6f1;
+  background-image:
+    radial-gradient(1100px 520px at 50% -8%, rgba(61, 128, 66, 0.14), transparent 62%),
+    radial-gradient(820px 460px at 106% 14%, rgba(238, 157, 43, 0.13), transparent 58%),
+    radial-gradient(760px 440px at -12% 64%, rgba(61, 128, 66, 0.08), transparent 62%),
+    linear-gradient(180deg, #f7f9f3 0%, #f1f4ed 52%, #eaeee6 100%);
+  background-attachment: fixed;
 }
 
-/* 卡片进场动画 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(30, 63, 34, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 42%, rgba(0, 0, 0, 0) 86%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 42%, rgba(0, 0, 0, 0) 86%);
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   动效
+   ============================================================ */
+
+/* 卡片进场 */
 @keyframes rise {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.rise {
-  animation: rise 0.45s ease both;
+.rise { animation: rise 0.45s ease both; }
+
+/* 错峰延迟（与 .rise 搭配） */
+.d1 { animation-delay: 0.06s; }
+.d2 { animation-delay: 0.12s; }
+.d3 { animation-delay: 0.18s; }
+.d4 { animation-delay: 0.24s; }
+.d5 { animation-delay: 0.3s; }
+
+/* 漂浮：装饰光斑 / 小圆点 */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.floaty { animation: floaty 6s ease-in-out infinite; }
+.floaty-slow { animation: floaty 9s ease-in-out infinite; }
+
+/* 光环扩散：上传区相机图标外圈 */
+@keyframes halo {
+  0% { transform: scale(0.86); opacity: 0.5; }
+  70% { transform: scale(1.28); opacity: 0; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+.halo { animation: halo 3.4s ease-out infinite; }
+
+/* 扫描线：上传区，暗示"AI 正在识别"的功能隐喻 */
+@keyframes scanline {
+  0% { top: 10%; opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.85; }
+  100% { top: 90%; opacity: 0; }
+}
+.scanline {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(61, 128, 66, 0.5), transparent);
+  animation: scanline 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 光带扫过：Hero 区 */
+@keyframes sheen {
+  0% { transform: translateX(-140%) skewX(-18deg); opacity: 0; }
+  35% { opacity: 0.55; }
+  100% { transform: translateX(260%) skewX(-18deg); opacity: 0; }
+}
+.sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: sheen 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============================================================
+   复用样式
+   ============================================================ */
+
+/* 步骤序号徽标 */
+.step-badge {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background-image: linear-gradient(135deg, #4d9950, #2b5630);
+  box-shadow: 0 4px 10px rgba(61, 128, 66, 0.3), 0 0 0 4px rgba(61, 128, 66, 0.1);
+}
+
+/* 卡片顶部渐变装饰条（需父级 position:relative + overflow:hidden） */
+.card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-image: linear-gradient(90deg, #3d8042, #71b173 55%, #ee9d2b);
+  pointer-events: none;
+}
+
+/* 上传区内层柔光 */
+.upload-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(61, 128, 66, 0.1), transparent 62%);
+}
+
+/* 上传区四角取景框 */
+.vf {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  border-color: rgba(61, 128, 66, 0.5);
+}
+.vf-tl { top: 14px; left: 14px; border-top-width: 3px; border-top-style: solid; border-left-width: 3px; border-left-style: solid; border-top-left-radius: 12px; }
+.vf-tr { top: 14px; right: 14px; border-top-width: 3px; border-top-style: solid; border-right-width: 3px; border-right-style: solid; border-top-right-radius: 12px; }
+.vf-bl { bottom: 14px; left: 14px; border-bottom-width: 3px; border-bottom-style: solid; border-left-width: 3px; border-left-style: solid; border-bottom-left-radius: 12px; }
+.vf-br { bottom: 14px; right: 14px; border-bottom-width: 3px; border-bottom-style: solid; border-right-width: 3px; border-right-style: solid; border-bottom-right-radius: 12px; }
+
+/* 功能性小标签 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #336737;
+  background: #f2f9f1;
+  box-shadow: inset 0 0 0 1px #dff0dc;
+}
+
+/* 无障碍：尊重系统"减少动态效果"设置 */
+@media (prefers-reduced-motion: reduce) {
+  .rise, .floaty, .floaty-slow, .halo, .scanline, .sheen {
+    animation: none !important;
+  }
 }

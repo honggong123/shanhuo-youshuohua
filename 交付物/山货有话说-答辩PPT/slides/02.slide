@@ -1,0 +1,73 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    {/* 顶部装饰带 */}
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    {/* 主内容 */}
+    <Box style={{ position: 'relative', paddingTop: 72, paddingLeft: 110, paddingRight: 110, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 18, marginBottom: 46 }}>
+            <Box style={{ width: 6, height: 40, background: '#1E4FA8', borderRadius: 3 }} />
+            <Box style={{ flexDirection: 'column', gap: 6 }}>
+                <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 3 }}>目录</Text>
+                <Text style={{ fontSize: 15, color: '#8B97A8', letterSpacing: 3, fontFamily: 'Times New Roman' }}>CONTENTS</Text>
+            </Box>
+        </Box>
+
+        {/* 五章导航 */}
+        <Box style={{ flexDirection: 'column', gap: 16 }}>
+
+            {/* 01 */}
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 26, background: '#F5F8FD', borderRadius: 10, paddingLeft: 30, paddingRight: 30, paddingTop: 18, paddingBottom: 18 }}>
+                <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#B9CDE9', fontFamily: 'Times New Roman', width: 74 }}>01</Text>
+                <Box style={{ width: 1, height: 42, background: '#D6DCE5' }} />
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#1A2230', letterSpacing: 1 }}>创作背景与需求分析</Text>
+                    <Text style={{ fontSize: 14, color: '#8B97A8' }}>山区农产品营销与乡村文旅讲解的真实痛点</Text>
+                </Box>
+            </Box>
+
+            {/* 02 */}
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 26, background: '#F5F8FD', borderRadius: 10, paddingLeft: 30, paddingRight: 30, paddingTop: 18, paddingBottom: 18 }}>
+                <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#B9CDE9', fontFamily: 'Times New Roman', width: 74 }}>02</Text>
+                <Box style={{ width: 1, height: 42, background: '#D6DCE5' }} />
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#1A2230', letterSpacing: 1 }}>作品方案设计</Text>
+                    <Text style={{ fontSize: 14, color: '#8B97A8' }}>总体架构、五大功能模块与全链路流程</Text>
+                </Box>
+            </Box>
+
+            {/* 03 */}
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 26, background: '#F5F8FD', borderRadius: 10, paddingLeft: 30, paddingRight: 30, paddingTop: 18, paddingBottom: 18 }}>
+                <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#B9CDE9', fontFamily: 'Times New Roman', width: 74 }}>03</Text>
+                <Box style={{ width: 1, height: 42, background: '#D6DCE5' }} />
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#1A2230', letterSpacing: 1 }}>关键技术与实现</Text>
+                    <Text style={{ fontSize: 14, color: '#8B97A8' }}>中文海报合成、统一模型网关等核心技术攻坚</Text>
+                </Box>
+            </Box>
+
+            {/* 04 */}
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 26, background: '#F5F8FD', borderRadius: 10, paddingLeft: 30, paddingRight: 30, paddingTop: 18, paddingBottom: 18 }}>
+                <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#B9CDE9', fontFamily: 'Times New Roman', width: 74 }}>04</Text>
+                <Box style={{ width: 1, height: 42, background: '#D6DCE5' }} />
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#1A2230', letterSpacing: 1 }}>系统实现与运行验证</Text>
+                    <Text style={{ fontSize: 14, color: '#8B97A8' }}>线上部署实测数据与现场演示路线</Text>
+                </Box>
+            </Box>
+
+            {/* 05 */}
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 26, background: '#EDF3FB', borderRadius: 10, paddingLeft: 30, paddingRight: 30, paddingTop: 18, paddingBottom: 18 }}>
+                <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#8FB3DE', fontFamily: 'Times New Roman', width: 74 }}>05</Text>
+                <Box style={{ width: 1, height: 42, background: '#D6DCE5' }} />
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 1 }}>创新价值与应用展望</Text>
+                    <Text style={{ fontSize: 14, color: '#6B7A90' }}>五个创新点、三方价值与推广前景</Text>
+                </Box>
+            </Box>
+
+        </Box>
+    </Box>
+</Slide>

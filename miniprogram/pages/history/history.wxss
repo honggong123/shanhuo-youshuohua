@@ -16,11 +16,24 @@
   flex-shrink: 0;
 }
 
+/* 无海报时用 CSS 山峦占位（替代 emoji，跨机型渲染一致） */
 .thumb-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40rpx;
+  background: linear-gradient(135deg, #f2f9f1, #dff0dc);
+}
+
+.mini-mtn {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-left-width: 24rpx;
+  border-right-width: 24rpx;
+  border-bottom-width: 30rpx;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: #71b173;
 }
 
 .item-body {

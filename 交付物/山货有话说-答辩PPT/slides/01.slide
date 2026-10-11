@@ -1,0 +1,71 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    {/* 顶部深蓝装饰带 */}
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+
+    {/* 左侧竖向色块装饰 */}
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    {/* 右上角浅蓝几何装饰 */}
+    <Box style={{ position: 'absolute', top: 60, right: 70, width: 220, height: 220, background: '#F0F5FC', borderRadius: 12 }} />
+    <Box style={{ position: 'absolute', top: 130, right: 130, width: 220, height: 220, background: '#E8EFF8', borderRadius: 12 }} />
+
+    {/* 主内容 */}
+    <Box style={{ position: 'relative', paddingTop: 130, paddingLeft: 110, paddingRight: 110, flexDirection: 'column' }}>
+
+        {/* 课题标签 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 30 }}>
+            <Box style={{ width: 44, height: 4, background: '#1E4FA8' }} />
+            <Text style={{ fontSize: 17, color: '#1E4FA8', fontWeight: 600, letterSpacing: 3 }}>
+                全国大学生数字媒体科技作品及创意竞赛
+            </Text>
+        </Box>
+
+        {/* 中文主标 */}
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#0E3F8C', lineHeight: 1.12, letterSpacing: 4 }}>
+            山货有话说
+        </Text>
+
+        {/* 英文副标 */}
+        <Text style={{ fontSize: 26, color: '#3D7BD9', fontWeight: 'bold', letterSpacing: 1.5, marginTop: 16, fontFamily: 'Times New Roman' }}>
+            Mountains Speak — An AI Platform for Agricultural Marketing & Rural Tourism
+        </Text>
+
+        {/* 中文副标 */}
+        <Text style={{ fontSize: 30, color: '#1A2230', fontWeight: 600, marginTop: 26, letterSpacing: 2 }}>
+            AI 助农数字文创平台
+        </Text>
+
+        {/* 一句话定位 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 18 }}>
+            <Box style={{ width: 6, height: 6, background: '#D9534F', borderRadius: 3 }} />
+            <Text style={{ fontSize: 20, color: '#4A5568' }}>
+                一张照片，30 秒生成山货营销五件套
+            </Text>
+        </Box>
+
+        {/* 分隔线 */}
+        <Box style={{ width: 620, height: 1, background: '#D6DCE5', marginTop: 52, marginBottom: 28 }} />
+
+        {/* 信息区 */}
+        <Box style={{ flexDirection: 'row', gap: 90 }}>
+            <Box style={{ flexDirection: 'column', gap: 12 }}>
+                <Text style={{ fontSize: 15, color: '#8B97A8', letterSpacing: 1 }}>汇 报 单 位</Text>
+                <Text style={{ fontSize: 21, color: '#1A2230', fontWeight: 600 }}>南昌航空大学科技学院</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 12 }}>
+                <Text style={{ fontSize: 15, color: '#8B97A8', letterSpacing: 1 }}>团 队 成 员</Text>
+                <Text style={{ fontSize: 21, color: '#1A2230', fontWeight: 600 }}>刘奉淳　陈邦楠　张进超　周涛</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 12 }}>
+                <Text style={{ fontSize: 15, color: '#8B97A8', letterSpacing: 1 }}>指 导 教 师</Text>
+                <Text style={{ fontSize: 21, color: '#1A2230', fontWeight: 600 }}>段欣妤　陈超</Text>
+            </Box>
+        </Box>
+    </Box>
+
+    {/* 底部信息条 */}
+    <Box style={{ position: 'absolute', bottom: 0, left: 0, width: 1280, height: 54, background: '#F7F9FC', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 110, paddingRight: 110 }}>
+        <Text style={{ fontSize: 15, color: '#8B97A8' }}>答辩演示文稿</Text>
+        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 600 }}>2026 年 10 月</Text>
+    </Box>
+</Slide>

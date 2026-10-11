@@ -1,0 +1,78 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 62, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 30 }}>
+            <Box style={{ width: 6, height: 32, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>工程能力：统一模型网关</Text>
+        </Box>
+
+        {/* 双栏对比 */}
+        <Box style={{ flexDirection: 'row', gap: 32, marginBottom: 30 }}>
+
+            <Box style={{ width: 528, background: '#F7F7F8', borderRadius: 12, paddingTop: 26, paddingBottom: 26, paddingLeft: 30, paddingRight: 30, flexDirection: 'column' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#8B97A8', marginBottom: 18 }}>常见做法：硬编码单厂商</Text>
+                <Box style={{ flexDirection: 'column', gap: 13 }}>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#9AA5B4' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#6B7A90', lineHeight: 1.65 }}>接口写死在业务代码里</Text>
+                    </Box>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#9AA5B4' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#6B7A90', lineHeight: 1.65 }}>换模型＝改代码＋重新部署</Text>
+                    </Box>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#9AA5B4' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#6B7A90', lineHeight: 1.65 }}>厂商涨价或停服 → 项目停摆</Text>
+                    </Box>
+                </Box>
+            </Box>
+
+            <Box style={{ width: 528, background: '#F5F8FD', borderRadius: 12, paddingTop: 26, paddingBottom: 26, paddingLeft: 30, paddingRight: 30, flexDirection: 'column' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#0E3F8C', marginBottom: 18 }}>我们的做法：网关可插拔</Text>
+                <Box style={{ flexDirection: 'column', gap: 13 }}>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 'bold' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#3A4658', lineHeight: 1.65 }}>统一封装为 OpenAI 兼容协议</Text>
+                    </Box>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 'bold' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#3A4658', lineHeight: 1.65 }}>环境变量改一行即完成切换</Text>
+                    </Box>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 'bold' }}>·</Text>
+                        <Text style={{ fontSize: 16, color: '#3A4658', lineHeight: 1.65 }}>五家厂商互为备份，永远有可用的模型</Text>
+                    </Box>
+                </Box>
+            </Box>
+
+        </Box>
+
+        {/* 支持厂商 */}
+        <Box style={{ flexDirection: 'column', gap: 14 }}>
+            <Text style={{ fontSize: 18, color: '#1A2230', fontWeight: 'bold' }}>当前已适配五家主流大模型</Text>
+            <Box style={{ flexDirection: 'row', gap: 14 }}>
+                <Box style={{ flexDirection: 'column', alignItems: 'center', background: '#FBECEB', borderRadius: 10, paddingTop: 14, paddingBottom: 14, width: 200 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#B3413D' }}>智谱 GLM</Text>
+                    <Text style={{ fontSize: 13, color: '#8B97A8', marginTop: 5 }}>默认 · 免费额度</Text>
+                </Box>
+                <Box style={{ flexDirection: 'column', alignItems: 'center', background: '#F5F8FD', borderRadius: 10, paddingTop: 14, paddingBottom: 14, width: 200 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#0E3F8C' }}>DeepSeek</Text>
+                    <Text style={{ fontSize: 13, color: '#8B97A8', marginTop: 5 }}>长文本能力强</Text>
+                </Box>
+                <Box style={{ flexDirection: 'column', alignItems: 'center', background: '#F5F8FD', borderRadius: 10, paddingTop: 14, paddingBottom: 14, width: 200 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#0E3F8C' }}>通义千问</Text>
+                    <Text style={{ fontSize: 13, color: '#8B97A8', marginTop: 5 }}>阿里生态</Text>
+                </Box>
+                <Box style={{ flexDirection: 'column', alignItems: 'center', background: '#F5F8FD', borderRadius: 10, paddingTop: 14, paddingBottom: 14, width: 200 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#0E3F8C' }}>Kimi</Text>
+                    <Text style={{ fontSize: 13, color: '#8B97A8', marginTop: 5 }}>中文语感佳</Text>
+                </Box>
+            </Box>
+        </Box>
+
+    </Box>
+</Slide>

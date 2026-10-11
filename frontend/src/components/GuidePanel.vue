@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { api } from '../api'
+import AppIcon from './AppIcon.vue'
 
 const villages = ref([])
 const current = ref('')
@@ -29,12 +30,26 @@ const filteredVillages = computed(() =>
     : villages.value.filter((v) => v.province === selectedProvince.value),
 )
 
+function clearOutput() {
+  story.value = ''
+  audioUrl.value = ''
+  demo.value = false
+  error.value = ''
+}
+
+function selectVillage(id) {
+  if (id === current.value) return
+  current.value = id
+  clearOutput()  // 避免显示上一个村落的讲解词与语音
+}
+
 function pickProvince(p) {
   selectedProvince.value = p
   // 若当前选中村落不在新省份里，自动切到该省第一个村落
   if (!filteredVillages.value.some((v) => v.id === current.value)) {
     current.value = filteredVillages.value[0]?.id || ''
   }
+  clearOutput()
 }
 
 async function tell() {
@@ -75,14 +90,33 @@ async function ask() {
 </script>
 
 <template>
-  <div class="rise rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-bold text-stone-900">🧭 AI 数字讲解员</h3>
+  <div class="rise d4 relative overflow-hidden rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
+    <span class="card-accent" aria-hidden="true"></span>
+
+    <!-- 右上角地图纹理装饰 -->
+    <svg
+      class="pointer-events-none absolute -right-6 -top-4 w-40 text-brand-500 opacity-[0.07]"
+      viewBox="0 0 160 120"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M0 96C26 66 50 84 74 70 98 56 124 78 160 58v62z" fill="currentColor" />
+      <path d="M0 112C30 92 56 104 84 94 112 84 136 98 160 88v32z" fill="currentColor" />
+      <circle cx="122" cy="26" r="14" fill="currentColor" />
+    </svg>
+
+    <div class="relative flex items-center justify-between">
+      <h3 class="flex items-center gap-2 text-lg font-bold text-stone-900">
+        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100">
+          <AppIcon name="compass" :size="18" />
+        </span>
+        AI 数字讲解员
+      </h3>
       <span class="text-xs text-stone-400">云游乡村 · 语音讲解</span>
     </div>
 
     <!-- 省份筛选 -->
-    <div class="mt-4 flex flex-wrap gap-1.5">
+    <div class="relative mt-4 flex flex-wrap gap-1.5">
       <button
         v-for="p in ['全部', ...provinces]"
         :key="p"
@@ -97,42 +131,48 @@ async function ask() {
     </div>
 
     <!-- 村落选择（随省份筛选） -->
-    <div class="mt-3 flex flex-wrap gap-2">
+    <div class="relative mt-3 flex flex-wrap gap-2">
       <button
         v-for="v in filteredVillages"
         :key="v.id"
-        class="rounded-xl border px-3.5 py-2 text-sm font-medium transition"
+        class="flex items-center gap-1 rounded-xl border px-3.5 py-2 text-sm font-medium transition"
         :class="current === v.id
           ? 'border-brand-600 bg-brand-600 text-white shadow-md shadow-brand-600/25'
           : 'border-stone-200 bg-white text-stone-600 hover:border-brand-400 hover:text-brand-700'"
-        @click="current = v.id"
+        @click="selectVillage(v.id)"
       >
+        <AppIcon
+          name="pin"
+          :size="13"
+          :class="current === v.id ? 'text-white/80' : 'text-brand-400'"
+        />
         {{ v.name }}
       </button>
       <p v-if="!filteredVillages.length" class="text-xs text-stone-400">该省份暂无村落</p>
     </div>
-    <p class="mt-2 text-[11px] text-stone-400">
+    <p class="relative mt-2 text-[11px] text-stone-400">
       已收录 {{ villages.length }} 个村落 · 覆盖 {{ provinces.length }} 个省区
     </p>
 
     <button
-      class="mt-4 w-full rounded-xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-brand-600/30 transition hover:bg-brand-700 active:scale-[0.99]"
+      class="relative mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-brand-600/30 transition hover:bg-brand-700 active:scale-[0.99] disabled:opacity-70"
       :disabled="loadingStory"
       @click="tell"
     >
-      {{ loadingStory ? '讲解员准备中…' : '🎙️ 生成沉浸式讲解' }}
+      <AppIcon name="mic" :size="16" />
+      {{ loadingStory ? '讲解员准备中…' : '生成沉浸式讲解' }}
     </button>
 
-    <div v-if="error" class="mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-600">⚠️ {{ error }}</div>
+    <div v-if="error" class="relative mt-3 rounded-xl bg-red-50 p-3 text-sm text-red-600">⚠️ {{ error }}</div>
 
-    <div v-if="story" class="mt-4 space-y-3">
+    <div v-if="story" class="relative mt-4 space-y-3">
       <p class="rounded-2xl bg-brand-50 p-4 text-sm leading-loose text-stone-700">{{ story }}</p>
       <span v-if="demo" class="text-[11px] text-harvest-600">演示文案 · 配置 Key 后由大模型实时生成</span>
       <audio v-if="audioUrl" :src="audioUrl" controls class="w-full"></audio>
       <div v-else-if="loadingAudio" class="text-center text-xs text-stone-400">语音合成中…</div>
     </div>
 
-    <div class="mt-4 flex gap-2">
+    <div class="relative mt-4 flex gap-2">
       <input
         v-model="question"
         type="text"

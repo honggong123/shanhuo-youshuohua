@@ -21,7 +21,28 @@ UPLOADS_DIR = BACKEND_DIR / "uploads"
 (GENERATED_DIR / "audio").mkdir(parents=True, exist_ok=True)
 UPLOADS_DIR.mkdir(exist_ok=True)
 
-FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
+
+def _find_frontend_dist() -> Path:
+    """定位网页版构建产物。
+
+    两种部署形态的目录关系不同，必须都支持：
+    - 本地 / 云服务器（仓库根构建）：backend/app/ ← BACKEND_DIR=backend/，
+      产物在 仓库根/frontend/dist   → BACKEND_DIR.parent/frontend/dist
+    - 容器（上传包构建）：/srv/app/ ← BACKEND_DIR=/srv，
+      产物在 /srv/frontend/dist     → BACKEND_DIR/frontend/dist
+    优先取「与 app 同级」的位置，再回退到「上一级」的旧约定。
+    """
+    candidates = [
+        BACKEND_DIR / "frontend" / "dist",
+        BACKEND_DIR.parent / "frontend" / "dist",
+    ]
+    for c in candidates:
+        if (c / "index.html").exists():
+            return c
+    return candidates[-1]  # 都不存在时返回旧约定路径，main.py 会跳过挂载
+
+
+FRONTEND_DIST = _find_frontend_dist()
 
 
 def _env(name: str, default: str = "") -> str:
@@ -162,6 +183,9 @@ def register_key(pid: str, key: str) -> dict:
     key = key.strip()
     if not key:
         raise ValueError("API Key 不能为空")
+    # 防注入：Key 必须是单行短字符串，否则会污染 .env（写入时按行拼接）
+    if any(ch in key for ch in "\r\n") or len(key) > 200:
+        raise ValueError("API Key 格式不正确（应为单行、长度不超过 200）")
     KEYS[pid] = key
     _save_key_env(pid, key)
     return switch_provider(pid)

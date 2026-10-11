@@ -1,15 +1,66 @@
+<!-- Hero：渐变底 + 光晕 + 山峦插画 + 能力标签 -->
 <view class="hero">
-  <view class="hero-title">拍一张照片，AI 为山货写文案、画海报、配语音</view>
-  <view class="hero-sub">乡村振兴 · 科创赋能</view>
+  <view class="hero-deco">
+    <view class="hero-sun"></view>
+    <view class="hero-hill hero-hill-a"></view>
+    <view class="hero-hill hero-hill-b"></view>
+    <view class="hero-glow hero-glow-a"></view>
+    <view class="hero-glow hero-glow-b"></view>
+  </view>
+  <view class="hero-inner">
+    <view class="hero-title">拍一张照片，AI 为山货写文案、画海报、配语音</view>
+    <view class="hero-sub">乡村振兴 · 科创赋能</view>
+    <view class="hero-tags">
+      <text class="hero-tag">多模态识别</text>
+      <text class="hero-tag">AIGC 海报</text>
+      <text class="hero-tag">大模型文案</text>
+      <text class="hero-tag">智能语音</text>
+      <text class="hero-tag">数字讲解员</text>
+    </view>
+  </view>
 </view>
 
 <!-- 第一步：上传 -->
 <view class="card">
-  <view class="step-title">① 上传山货照片</view>
-  <view wx:if="{{!photoPath}}" class="pick-area" bindtap="chooseImage">
-    <view class="pick-icon">📷</view>
-    <view class="pick-text">拍照或从相册选择</view>
+  <view class="step-title">
+    <view class="step-badge">1</view>
+    <text>上传山货照片</text>
+    <view class="step-line"></view>
   </view>
+
+  <view wx:if="{{!photoPath}}" class="pick-area" bindtap="chooseImage">
+    <view class="pick-glow"></view>
+    <view class="vf vf-tl"></view>
+    <view class="vf vf-tr"></view>
+    <view class="vf vf-bl"></view>
+    <view class="vf vf-br"></view>
+    <view class="scanline"></view>
+
+    <view class="pick-inner">
+      <view class="pick-icon-wrap">
+        <view class="pick-halo"></view>
+        <view class="pick-icon">
+          <view class="cam-bump"></view>
+          <view class="cam-body"></view>
+          <view class="cam-lens"></view>
+        </view>
+        <view class="pick-dot pick-dot-a"></view>
+        <view class="pick-dot pick-dot-b"></view>
+      </view>
+
+      <view class="pick-text">拍摄或从相册选择一张农产品照片</view>
+      <view class="pick-hint">点击选择 / 手机直接拍照</view>
+
+      <view class="pick-chips">
+        <text class="mini-chip">JPG / PNG</text>
+        <text class="mini-chip">≤ 10MB</text>
+        <text class="mini-chip">本地预览</text>
+      </view>
+
+      <view class="pick-btn">选择照片</view>
+    </view>
+  </view>
+
   <block wx:else>
     <image class="preview" src="{{photoPath}}" mode="aspectFit" bindtap="chooseImage" />
     <view class="row">
@@ -23,7 +74,12 @@
 
 <!-- 识别结果 + 四件套 -->
 <view class="card" wx:if="{{rec}}">
-  <view class="step-title">② AI 识别与创作</view>
+  <view class="step-title">
+    <view class="step-badge">2</view>
+    <text>AI 识别与创作</text>
+    <view class="step-line"></view>
+  </view>
+
   <view class="rec-name">{{rec.name}}</view>
   <view class="rec-meta">
     <text class="rec-chip">{{rec.category}}</text>

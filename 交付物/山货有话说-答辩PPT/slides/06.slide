@@ -1,0 +1,20 @@
+<Slide style={{ width: 1280, height: 720, background: '#0E3F8C', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: -80, right: -60, width: 460, height: 460, background: '#164C9E', borderRadius: 230 }} />
+    <Box style={{ position: 'absolute', bottom: -120, right: 180, width: 320, height: 320, background: '#143F82', borderRadius: 160 }} />
+
+    <Box style={{ position: 'relative', paddingTop: 240, paddingLeft: 120, flexDirection: 'column' }}>
+        <Text style={{ fontSize: 190, fontWeight: 'bold', color: '#2E6FC7', fontFamily: 'Times New Roman', lineHeight: 1, letterSpacing: 4 }}>
+            02
+        </Text>
+        <Box style={{ width: 96, height: 5, background: '#FFFFFF', marginTop: 34, marginBottom: 30, borderRadius: 3 }} />
+        <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#FFFFFF', letterSpacing: 6 }}>
+            作品方案设计
+        </Text>
+        <Text style={{ fontSize: 20, color: '#9FC0E8', letterSpacing: 2, marginTop: 22, fontFamily: 'Times New Roman' }}>
+            System Architecture & Solution Design
+        </Text>
+        <Text style={{ fontSize: 19, color: '#C5D8F0', marginTop: 34, letterSpacing: 1 }}>
+            双端产品形态 + 多厂商模型网关，把 AI 能力装进农户口袋
+        </Text>
+    </Box>
+</Slide>

@@ -1,0 +1,108 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 58, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 26 }}>
+            <Box style={{ width: 6, height: 32, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>总体架构：四层解耦，双端触达</Text>
+        </Box>
+
+        {/* 第 1 层：接入层 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 14 }}>
+            <Box style={{ width: 128, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 13, color: '#8B97A8', letterSpacing: 1 }}>接 入 层</Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', gap: 16 }}>
+                <Box style={{ width: 300, background: '#EAF1FB', borderRadius: 8, paddingTop: 14, paddingBottom: 14, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#0E3F8C' }}>微信小程序端</Text>
+                    <Text style={{ fontSize: 13, color: '#6B7A90', marginTop: 4 }}>原生开发 · 随拍随用</Text>
+                </Box>
+                <Box style={{ width: 300, background: '#EAF1FB', borderRadius: 8, paddingTop: 14, paddingBottom: 14, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#0E3F8C' }}>H5 网页端</Text>
+                    <Text style={{ fontSize: 13, color: '#6B7A90', marginTop: 4 }}>Vue3 + Vite · 免安装</Text>
+                </Box>
+            </Box>
+        </Box>
+
+        {/* 箭头 */}
+        <Box style={{ flexDirection: 'row', paddingLeft: 168, marginBottom: 8 }}>
+            <Text style={{ fontSize: 18, color: '#B9CDE9', letterSpacing: 40 }}>▼</Text>
+        </Box>
+
+        {/* 第 2 层：服务层 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 14 }}>
+            <Box style={{ width: 128, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 13, color: '#8B97A8', letterSpacing: 1 }}>服 务 层</Text>
+            </Box>
+            <Box style={{ width: 616, background: '#1E4FA8', borderRadius: 8, paddingTop: 16, paddingBottom: 16, alignItems: 'center' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' }}>FastAPI 后端服务</Text>
+                <Text style={{ fontSize: 13, color: '#B9CDE9', marginTop: 5 }}>业务编排 · 异步并发 · 五件套流水线</Text>
+            </Box>
+        </Box>
+
+        {/* 箭头 */}
+        <Box style={{ flexDirection: 'row', paddingLeft: 168, marginBottom: 8 }}>
+            <Text style={{ fontSize: 18, color: '#B9CDE9', letterSpacing: 40 }}>▼</Text>
+        </Box>
+
+        {/* 第 3 层：能力层 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 20, marginBottom: 14 }}>
+            <Box style={{ width: 128, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 13, color: '#8B97A8', letterSpacing: 1 }}>能 力 层</Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', gap: 14 }}>
+                <Box style={{ width: 196, background: '#F5F8FD', borderRadius: 8, paddingTop: 12, paddingBottom: 12, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1A2230' }}>统一模型网关</Text>
+                    <Text style={{ fontSize: 12, color: '#8B97A8', marginTop: 4 }}>OpenAI 兼容协议</Text>
+                </Box>
+                <Box style={{ width: 196, background: '#F5F8FD', borderRadius: 8, paddingTop: 12, paddingBottom: 12, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1A2230' }}>图像合成引擎</Text>
+                    <Text style={{ fontSize: 12, color: '#8B97A8', marginTop: 4 }}>Pillow 精确排版</Text>
+                </Box>
+                <Box style={{ width: 196, background: '#F5F8FD', borderRadius: 8, paddingTop: 12, paddingBottom: 12, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1A2230' }}>语音合成引擎</Text>
+                    <Text style={{ fontSize: 12, color: '#8B97A8', marginTop: 4 }}>Edge-TTS</Text>
+                </Box>
+            </Box>
+        </Box>
+
+        {/* 箭头 */}
+        <Box style={{ flexDirection: 'row', paddingLeft: 168, marginBottom: 8 }}>
+            <Text style={{ fontSize: 18, color: '#B9CDE9', letterSpacing: 40 }}>▼</Text>
+        </Box>
+
+        {/* 第 4 层：模型层 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+            <Box style={{ width: 128, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 13, color: '#8B97A8', letterSpacing: 1 }}>模 型 层</Text>
+            </Box>
+            <Box style={{ flexDirection: 'row', gap: 12 }}>
+                <Box style={{ background: '#FBECEB', borderRadius: 20, paddingLeft: 20, paddingRight: 20, paddingTop: 9, paddingBottom: 9 }}>
+                    <Text style={{ fontSize: 15, color: '#B3413D', fontWeight: 600 }}>智谱 GLM</Text>
+                </Box>
+                <Box style={{ background: '#EAF1FB', borderRadius: 20, paddingLeft: 20, paddingRight: 20, paddingTop: 9, paddingBottom: 9 }}>
+                    <Text style={{ fontSize: 15, color: '#0E3F8C', fontWeight: 600 }}>DeepSeek</Text>
+                </Box>
+                <Box style={{ background: '#EAF1FB', borderRadius: 20, paddingLeft: 20, paddingRight: 20, paddingTop: 9, paddingBottom: 9 }}>
+                    <Text style={{ fontSize: 15, color: '#0E3F8C', fontWeight: 600 }}>通义千问</Text>
+                </Box>
+                <Box style={{ background: '#EAF1FB', borderRadius: 20, paddingLeft: 20, paddingRight: 20, paddingTop: 9, paddingBottom: 9 }}>
+                    <Text style={{ fontSize: 15, color: '#0E3F8C', fontWeight: 600 }}>Kimi</Text>
+                </Box>
+                <Box style={{ background: '#EAF1FB', borderRadius: 20, paddingLeft: 20, paddingRight: 20, paddingTop: 9, paddingBottom: 9 }}>
+                    <Text style={{ fontSize: 15, color: '#0E3F8C', fontWeight: 600 }}>OpenAI</Text>
+                </Box>
+            </Box>
+        </Box>
+
+        {/* 底部说明 */}
+        <Box style={{ flexDirection: 'row', gap: 14, marginTop: 22 }}>
+            <Text style={{ fontSize: 14, color: '#8B97A8' }}>数据层：</Text>
+            <Text style={{ fontSize: 14, color: '#4A5568' }}>SQLite 轻量存储（用户 / 历史 / 村落档案）　·　无需额外数据库运维，开箱即用</Text>
+        </Box>
+
+    </Box>
+</Slide>

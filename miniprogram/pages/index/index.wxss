@@ -1,7 +1,76 @@
+/* ============ Hero ============ */
 .hero {
-  background: linear-gradient(140deg, #336737, #3d8042 60%, #4d9950);
-  padding: 40rpx 32rpx 44rpx;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(150deg, #2b5630, #3d8042 55%, #4d9950);
+  padding: 44rpx 32rpx 48rpx;
   color: #ffffff;
+}
+
+/* 装饰层：绝对定位，不参与布局 */
+.hero-deco {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hero-glow-a {
+  left: -90rpx;
+  top: -110rpx;
+  width: 300rpx;
+  height: 300rpx;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-glow-b {
+  right: -80rpx;
+  bottom: -120rpx;
+  width: 320rpx;
+  height: 320rpx;
+  background: rgba(238, 157, 43, 0.2);
+}
+
+.hero-sun {
+  position: absolute;
+  right: 70rpx;
+  bottom: 82rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+/* 山峦：用椭圆顶 + 负偏移拼出层叠丘陵 */
+.hero-hill {
+  position: absolute;
+  border-radius: 100% 100% 0 0;
+}
+
+.hero-hill-a {
+  left: -10%;
+  right: 30%;
+  bottom: -26rpx;
+  height: 132rpx;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.hero-hill-b {
+  left: 24%;
+  right: -10%;
+  bottom: -42rpx;
+  height: 104rpx;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.hero-inner {
+  position: relative;
 }
 
 .hero-title {
@@ -11,37 +80,222 @@
 }
 
 .hero-sub {
-  margin-top: 10rpx;
+  margin-top: 12rpx;
   font-size: 24rpx;
   opacity: 0.85;
 }
 
-.step-title {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #57534e;
-  margin-bottom: 20rpx;
+.hero-tags {
+  margin-top: 22rpx;
+  display: flex;
+  flex-wrap: wrap;
 }
 
+.hero-tag {
+  font-size: 20rpx;
+  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2rpx solid rgba(255, 255, 255, 0.22);
+  margin: 0 12rpx 12rpx 0;
+}
+
+/* ============ 上传区 ============ */
 .pick-area {
-  border: 3rpx dashed #a7c4a9;
-  border-radius: 24rpx;
-  background: #f2f9f1;
+  position: relative;
+  overflow: hidden;
+  border: 3rpx dashed #9ccb98;
+  border-radius: 26rpx;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 56rpx 28rpx 48rpx;
+}
+
+.pick-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 220rpx;
+  background: linear-gradient(180deg, rgba(61, 128, 66, 0.1), rgba(61, 128, 66, 0));
+}
+
+/* 四角取景框（用长写属性，避免简写把颜色重置成 currentColor） */
+.vf {
+  position: absolute;
+  width: 40rpx;
+  height: 40rpx;
+  border-color: rgba(61, 128, 66, 0.5);
+}
+
+.vf-tl {
+  left: 20rpx;
+  top: 20rpx;
+  border-top-width: 5rpx;
+  border-top-style: solid;
+  border-left-width: 5rpx;
+  border-left-style: solid;
+  border-top-left-radius: 18rpx;
+}
+
+.vf-tr {
+  right: 20rpx;
+  top: 20rpx;
+  border-top-width: 5rpx;
+  border-top-style: solid;
+  border-right-width: 5rpx;
+  border-right-style: solid;
+  border-top-right-radius: 18rpx;
+}
+
+.vf-bl {
+  left: 20rpx;
+  bottom: 20rpx;
+  border-bottom-width: 5rpx;
+  border-bottom-style: solid;
+  border-left-width: 5rpx;
+  border-left-style: solid;
+  border-bottom-left-radius: 18rpx;
+}
+
+.vf-br {
+  right: 20rpx;
+  bottom: 20rpx;
+  border-bottom-width: 5rpx;
+  border-bottom-style: solid;
+  border-right-width: 5rpx;
+  border-right-style: solid;
+  border-bottom-right-radius: 18rpx;
+}
+
+/* 扫描线：暗示"AI 正在识别" */
+.scanline {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  height: 3rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, rgba(61, 128, 66, 0), rgba(61, 128, 66, 0.5), rgba(61, 128, 66, 0));
+  animation: scanline 4.2s ease-in-out infinite;
+}
+
+.pick-inner {
+  position: relative;
   text-align: center;
-  padding: 70rpx 0;
+}
+
+/* 相机图标：纯 CSS 绘制（避免 emoji 跨机型渲染差异） */
+.pick-icon-wrap {
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+  margin: 0 auto 26rpx;
+}
+
+.pick-halo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 34rpx;
+  background: rgba(113, 177, 115, 0.35);
+  animation: halo 3.4s ease-out infinite;
 }
 
 .pick-icon {
-  font-size: 70rpx;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 34rpx;
+  background: linear-gradient(135deg, #f2f9f1, #dff0dc);
+  box-shadow: inset 0 0 0 2rpx #c2e0be;
+}
+
+.cam-body {
+  position: absolute;
+  left: 26rpx;
+  top: 42rpx;
+  width: 68rpx;
+  height: 46rpx;
+  border-radius: 12rpx;
+  background: #3d8042;
+}
+
+.cam-bump {
+  position: absolute;
+  left: 44rpx;
+  top: 32rpx;
+  width: 32rpx;
+  height: 14rpx;
+  border-radius: 7rpx 7rpx 0 0;
+  background: #3d8042;
+}
+
+.cam-lens {
+  position: absolute;
+  left: 49rpx;
+  top: 54rpx;
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background: #f2f9f1;
+  box-shadow: inset 0 0 0 5rpx #71b173;
+}
+
+.pick-dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.pick-dot-a {
+  right: -6rpx;
+  top: 4rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background: #f5b04a;
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.pick-dot-b {
+  left: -10rpx;
+  bottom: 10rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background: #9ccb98;
+  animation: floaty 9s ease-in-out infinite;
 }
 
 .pick-text {
-  margin-top: 12rpx;
-  color: #3d8042;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 600;
+  color: #2b5630;
 }
 
+.pick-hint {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #78716c;
+}
+
+.pick-chips {
+  margin-top: 22rpx;
+}
+
+.pick-btn {
+  display: inline-block;
+  margin-top: 26rpx;
+  padding: 18rpx 52rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #4d9950, #3d8042);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 20rpx rgba(61, 128, 66, 0.28);
+}
+
+/* ============ 预览 ============ */
 .preview {
   width: 100%;
   height: 420rpx;
@@ -59,6 +313,7 @@
   flex: 1;
 }
 
+/* ============ 识别结果 ============ */
 .rec-name {
   font-size: 40rpx;
   font-weight: 700;
@@ -76,8 +331,8 @@
 .rec-chip {
   background: #dff0dc;
   color: #336737;
-  border-radius: 14rpx;
-  padding: 6rpx 18rpx;
+  border-radius: 999rpx;
+  padding: 8rpx 20rpx;
   font-size: 22rpx;
 }
 
@@ -89,8 +344,8 @@
 .rec-demo {
   background: #fdf3e3;
   color: #d97f16;
-  border-radius: 12rpx;
-  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  padding: 8rpx 18rpx;
   font-size: 20rpx;
 }
 
@@ -117,20 +372,14 @@
 }
 
 .gen-btn {
-  margin-top: 24rpx;
+  margin-top: 26rpx;
 }
 
-.loading-line {
-  text-align: center;
-  color: #a8a29e;
-  font-size: 26rpx;
-  padding: 30rpx 0;
-}
-
+/* ============ Tabs ============ */
 .tabs {
   display: flex;
   border-bottom: 2rpx solid #f0eeec;
-  margin-top: 24rpx;
+  margin-top: 26rpx;
 }
 
 .tab-item {
@@ -195,6 +444,7 @@
   margin-top: 18rpx;
 }
 
+/* ============ 视频脚本 ============ */
 .scene {
   border: 2rpx solid #f0eeec;
   border-radius: 18rpx;
@@ -209,7 +459,7 @@
 }
 
 .scene-no {
-  background: #3d8042;
+  background: linear-gradient(135deg, #4d9950, #3d8042);
   color: #ffffff;
   font-size: 20rpx;
   border-radius: 8rpx;
@@ -229,6 +479,7 @@
   line-height: 1.7;
 }
 
+/* ============ 价格价值 ============ */
 .price-box {
   border-radius: 18rpx;
   padding: 20rpx;

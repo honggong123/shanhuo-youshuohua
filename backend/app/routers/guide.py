@@ -36,9 +36,9 @@ def villages():
 @router.post("/api/guide", response_model=GuideOut)
 def guide(body: GuideIn):
     v = _find(body.village_id)
-    demo = not config.LLM_API_KEY
+    live = bool(config.LLM_API_KEY)  # 是否真正走大模型（失败回退后置 False）
     if body.question.strip():
-        if demo:
+        if not live:
             text = (f"（演示模式）关于{v['name']}：{v['intro']} "
                     f"这个问题非常好——简单说，{v['tags'][0]}是这里最大的特色。"
                     "配置大模型 API Key 后，我可以详细为你解答。")
@@ -51,8 +51,9 @@ def guide(body: GuideIn):
                 ], temperature=0.7)
             except Exception:
                 text = f"关于{v['name']}：{v['intro']}"
+                live = False
     else:
-        if demo:
+        if not live:
             text = demo_story(v)
         else:
             try:
@@ -64,4 +65,5 @@ def guide(body: GuideIn):
                 ], temperature=0.8)
             except Exception:
                 text = demo_story(v)
-    return GuideOut(village=v["name"], story=text.strip(), demo=demo)
+                live = False
+    return GuideOut(village=v["name"], story=text.strip(), demo=not live)

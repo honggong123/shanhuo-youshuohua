@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { api } from '../api'
+import AppIcon from './AppIcon.vue'
+import BrandMark from './BrandMark.vue'
 
 const props = defineProps({
   user: { type: Object, default: null },
@@ -49,9 +51,15 @@ watch(() => [props.user, props.tick], load, { immediate: true })
 </script>
 
 <template>
-  <div class="rise rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
+  <div class="rise relative overflow-hidden rounded-3xl border border-stone-200 bg-white p-5 pt-6 shadow-sm">
+    <span class="card-accent" aria-hidden="true"></span>
     <div class="flex items-center justify-between">
-      <h3 class="text-lg font-bold text-stone-900">🗂️ 我的生成历史</h3>
+      <h3 class="flex items-center gap-2 text-lg font-bold text-stone-900">
+        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100">
+          <AppIcon name="history" :size="18" />
+        </span>
+        我的生成历史
+      </h3>
       <span v-if="user" class="text-xs text-stone-400">{{ items.length }} 条记录</span>
     </div>
 
@@ -84,18 +92,20 @@ watch(() => [props.user, props.tick], load, { immediate: true })
             alt="海报缩略图"
             class="h-14 w-11 shrink-0 rounded-lg object-cover shadow-sm"
           />
-          <div v-else class="flex h-14 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-xl">🍊</div>
+          <div v-else class="flex h-14 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50">
+            <BrandMark :size="26" :radius="7" />
+          </div>
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-semibold text-stone-800">{{ it.name }}</p>
             <p class="truncate text-xs text-stone-500">{{ it.title || '山货四件套' }}</p>
             <p class="mt-0.5 text-[10px] text-stone-400">{{ fmtTime(it.created_at) }}</p>
           </div>
           <button
-            class="shrink-0 rounded-lg p-2 text-xs text-stone-300 transition hover:bg-red-50 hover:text-red-500"
+            class="shrink-0 rounded-lg p-2 text-stone-300 transition hover:bg-red-50 hover:text-red-500"
             title="删除该记录"
             @click="del(it.id)"
           >
-            🗑
+            <AppIcon name="trash" :size="16" />
           </button>
         </div>
         <p v-if="items.length > shown.length" class="text-center text-[11px] text-stone-400">
@@ -104,7 +114,7 @@ watch(() => [props.user, props.tick], load, { immediate: true })
       </div>
 
       <div v-else class="mt-4 rounded-2xl bg-stone-50 p-5 text-center">
-        <p class="text-sm text-stone-500">还没有生成记录，去上面传一张山货照片试试吧 📷</p>
+        <p class="text-sm text-stone-500">还没有生成记录，去上面传一张山货照片试试吧</p>
       </div>
     </template>
   </div>

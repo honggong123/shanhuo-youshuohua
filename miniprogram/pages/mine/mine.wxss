@@ -1,27 +1,89 @@
 .user-card {
-  background: linear-gradient(140deg, #336737, #4d9950);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, #2b5630, #3d8042 60%, #4d9950);
   margin: 20rpx 24rpx;
-  border-radius: 24rpx;
-  padding: 40rpx 32rpx;
+  border-radius: 28rpx;
+  padding: 44rpx 32rpx;
   display: flex;
   align-items: center;
   gap: 24rpx;
   color: #ffffff;
+  box-shadow: 0 10rpx 26rpx rgba(43, 86, 48, 0.22);
+  animation: rise 0.42s ease both;
 }
 
+/* 卡片内装饰：光晕 + 丘陵水印 */
+.user-deco {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.ud-glow {
+  position: absolute;
+  right: -70rpx;
+  top: -90rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ud-hill {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -46rpx;
+  height: 130rpx;
+  border-radius: 100% 100% 0 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* 头像：纯 CSS 人像，替代 emoji */
 .avatar {
+  position: relative;
   width: 110rpx;
   height: 110rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
-  text-align: center;
-  line-height: 110rpx;
-  font-size: 54rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.av-head {
+  position: absolute;
+  left: 36rpx;
+  top: 24rpx;
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.av-body {
+  position: absolute;
+  left: 22rpx;
+  top: 68rpx;
+  width: 66rpx;
+  height: 42rpx;
+  border-radius: 999rpx 999rpx 0 0;
+  background: #ffffff;
+}
+
+.user-info {
+  position: relative;
+  min-width: 0;
 }
 
 .nickname {
   font-size: 36rpx;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .username {
@@ -31,7 +93,7 @@
 }
 
 .engines {
-  margin-top: 20rpx;
+  margin-top: 22rpx;
   display: flex;
   flex-wrap: wrap;
   gap: 12rpx;
@@ -49,7 +111,7 @@
 }
 
 .about {
-  margin-top: 16rpx;
+  margin-top: 18rpx;
   font-size: 24rpx;
   color: #57534e;
   line-height: 1.9;

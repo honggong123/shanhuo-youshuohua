@@ -1,0 +1,76 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 62, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 34 }}>
+            <Box style={{ width: 6, height: 32, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>线上运行实测数据</Text>
+        </Box>
+
+        {/* KPI 三联数 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', marginBottom: 40 }}>
+
+            <Box style={{ width: 280, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 70, fontWeight: 'bold', color: '#0E3F8C', fontFamily: 'Times New Roman', lineHeight: 1 }}>0.2</Text>
+                <Text style={{ fontSize: 17, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>秒 · 健康检查</Text>
+                <Text style={{ fontSize: 14, color: '#8B97A8', marginTop: 6 }}>/api/health 响应</Text>
+            </Box>
+
+            <Box style={{ width: 1, height: 84, background: '#D6DCE5' }} />
+
+            <Box style={{ width: 280, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 70, fontWeight: 'bold', color: '#1E4FA8', fontFamily: 'Times New Roman', lineHeight: 1 }}>2.25</Text>
+                <Text style={{ fontSize: 17, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>秒 · AI 识图</Text>
+                <Text style={{ fontSize: 14, color: '#8B97A8', marginTop: 6 }}>真实模型调用耗时</Text>
+            </Box>
+
+            <Box style={{ width: 1, height: 84, background: '#D6DCE5' }} />
+
+            <Box style={{ width: 280, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 70, fontWeight: 'bold', color: '#D9534F', fontFamily: 'Times New Roman', lineHeight: 1 }}>30</Text>
+                <Text style={{ fontSize: 17, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>秒内 · 五件套</Text>
+                <Text style={{ fontSize: 14, color: '#8B97A8', marginTop: 6 }}>端到端生成完成</Text>
+            </Box>
+
+        </Box>
+
+        {/* 验证清单 */}
+        <Box style={{ background: '#F5F8FD', borderRadius: 12, paddingTop: 24, paddingBottom: 24, paddingLeft: 32, paddingRight: 32, flexDirection: 'column' }}>
+            <Text style={{ fontSize: 18, color: '#0E3F8C', fontWeight: 'bold', marginBottom: 16 }}>已完成的线上验证项</Text>
+
+            <Box style={{ flexDirection: 'column', gap: 12 }}>
+                <Box style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                    <Box style={{ width: 20, height: 20, background: '#1E4FA8', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#FFFFFF', fontWeight: 'bold' }}>✓</Text>
+                    </Box>
+                    <Text style={{ fontSize: 16, color: '#3A4658' }}>微信云托管部署成功，公网可访问，无需本地环境</Text>
+                </Box>
+
+                <Box style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                    <Box style={{ width: 20, height: 20, background: '#1E4FA8', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#FFFFFF', fontWeight: 'bold' }}>✓</Text>
+                    </Box>
+                    <Text style={{ fontSize: 16, color: '#3A4658' }}>容器出网正常，可真实调用智谱 GLM 多模态模型（demo 标识为 false）</Text>
+                </Box>
+
+                <Box style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                    <Box style={{ width: 20, height: 20, background: '#1E4FA8', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#FFFFFF', fontWeight: 'bold' }}>✓</Text>
+                    </Box>
+                    <Text style={{ fontSize: 16, color: '#3A4658' }}>小程序端与 H5 网页端双端实测通过，接口数据一致</Text>
+                </Box>
+
+                <Box style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                    <Box style={{ width: 20, height: 20, background: '#1E4FA8', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#FFFFFF', fontWeight: 'bold' }}>✓</Text>
+                    </Box>
+                    <Text style={{ fontSize: 16, color: '#3A4658' }}>注册登录、生成历史、五件套下载全流程走通</Text>
+                </Box>
+            </Box>
+        </Box>
+
+    </Box>
+</Slide>

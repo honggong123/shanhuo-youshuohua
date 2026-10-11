@@ -1,6 +1,13 @@
 <!-- 用户卡片 -->
 <view class="user-card">
-  <view class="avatar">👤</view>
+  <view class="user-deco">
+    <view class="ud-glow"></view>
+    <view class="ud-hill"></view>
+  </view>
+  <view class="avatar">
+    <view class="av-head"></view>
+    <view class="av-body"></view>
+  </view>
   <view class="user-info">
     <view class="nickname">{{nickname}}</view>
     <view class="username">账号：{{username}}</view>
@@ -9,8 +16,8 @@
 
 <!-- 模型引擎 -->
 <view class="card">
-  <view class="title">🧠 模型引擎</view>
-  <view class="subtitle" style="margin-top: 6rpx;">当前：{{engine.active ? activeName : '演示模式'}}</view>
+  <view class="title"><view class="title-bar"></view>模型引擎</view>
+  <view class="subtitle" style="margin-top: 10rpx;">当前：{{engine.active ? activeName : '演示模式'}}</view>
   <view class="engines">
     <text
       wx:for="{{engine.providers}}"
@@ -25,7 +32,7 @@
 
 <!-- 关于 -->
 <view class="card">
-  <view class="title">🍊 关于</view>
+  <view class="title"><view class="title-bar"></view>关于</view>
   <view class="about">
     《山货有话说》—— AI 助农数字文创平台 v0.4
     对应"乡村振兴·科创赋能"指定命题

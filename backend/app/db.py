@@ -8,6 +8,7 @@ import hashlib
 import secrets
 import sqlite3
 import time
+from contextlib import contextmanager
 
 from . import config
 
@@ -16,10 +17,23 @@ DB_PATH = config.BACKEND_DIR / "shanhuo.db"
 TOKEN_TTL = 7 * 24 * 3600  # 令牌有效期：7 天
 
 
-def get_conn() -> sqlite3.Connection:
+@contextmanager
+def get_conn():
+    """打开连接，退出时自动提交并关闭。
+
+    注意：sqlite3.Connection 自带的上下文管理器只负责提交/回滚，**不会关闭连接**；
+    直接 `with sqlite3.connect(...)` 会造成连接泄漏。这里统一封装为「提交 + 关闭」。
+    """
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
-    return conn
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def init_db() -> None:
@@ -146,4 +160,6 @@ def delete_history(user_id: int, history_id: int) -> bool:
         cur = c.execute(
             "DELETE FROM history WHERE id = ? AND user_id = ?", (history_id, user_id)
         )
-    return cur.rowcount > 0
+        # 必须在连接关闭前读取 rowcount（关闭后游标不可用）
+        affected = cur.rowcount
+    return affected > 0

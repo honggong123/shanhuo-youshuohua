@@ -1,0 +1,20 @@
+<Slide style={{ width: 1280, height: 720, background: '#0E3F8C', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: -80, right: -60, width: 460, height: 460, background: '#164C9E', borderRadius: 230 }} />
+    <Box style={{ position: 'absolute', bottom: -120, right: 180, width: 320, height: 320, background: '#143F82', borderRadius: 160 }} />
+
+    <Box style={{ position: 'relative', paddingTop: 240, paddingLeft: 120, flexDirection: 'column' }}>
+        <Text style={{ fontSize: 190, fontWeight: 'bold', color: '#2E6FC7', fontFamily: 'Times New Roman', lineHeight: 1, letterSpacing: 4 }}>
+            04
+        </Text>
+        <Box style={{ width: 96, height: 5, background: '#FFFFFF', marginTop: 34, marginBottom: 30, borderRadius: 3 }} />
+        <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#FFFFFF', letterSpacing: 6 }}>
+            系统实现与运行验证
+        </Text>
+        <Text style={{ fontSize: 20, color: '#9FC0E8', letterSpacing: 2, marginTop: 22, fontFamily: 'Times New Roman' }}>
+            Implementation & Online Verification
+        </Text>
+        <Text style={{ fontSize: 19, color: '#C5D8F0', marginTop: 34, letterSpacing: 1 }}>
+            已经真实上线，所有数据来自线上实测
+        </Text>
+    </Box>
+</Slide>

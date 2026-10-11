@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import AppIcon from './AppIcon.vue'
 
 const props = defineProps({
   rec: { type: Object, required: true },
@@ -14,11 +15,11 @@ const emit = defineEmits(['generate'])
 
 const tab = ref('copy')
 const tabs = [
-  { key: 'copy', label: '✍️ 卖点文案' },
-  { key: 'poster', label: '🖼️ 文创海报' },
-  { key: 'audio', label: '🔊 语音介绍' },
-  { key: 'script', label: '🎬 视频脚本' },
-  { key: 'price', label: '💰 价格价值' },
+  { key: 'copy', label: '卖点文案', icon: 'fileText' },
+  { key: 'poster', label: '文创海报', icon: 'image' },
+  { key: 'audio', label: '语音介绍', icon: 'mic' },
+  { key: 'script', label: '视频脚本', icon: 'video' },
+  { key: 'price', label: '价格价值', icon: 'tag' },
 ]
 
 const audioText = computed(() => {
@@ -34,7 +35,8 @@ const anyLoading = computed(() =>
 <template>
   <div class="rise space-y-5">
     <!-- 识别结果卡 -->
-    <div class="rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
+    <div class="relative overflow-hidden rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
+      <span class="card-accent" aria-hidden="true"></span>
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold tracking-wider text-brand-600">AI 识别结果</span>
         <span v-if="rec.demo" class="rounded-full bg-harvest-400/20 px-2.5 py-1 text-xs font-medium text-harvest-600">
@@ -57,10 +59,11 @@ const anyLoading = computed(() =>
     <!-- 生成按钮 -->
     <button
       v-if="!gen && !anyLoading"
-      class="w-full rounded-2xl bg-gradient-to-r from-brand-600 to-harvest-500 px-4 py-4 text-base font-bold text-white shadow-lg shadow-brand-600/30 transition hover:brightness-105 active:scale-[0.99]"
+      class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-600 to-harvest-500 px-4 py-4 text-base font-bold text-white shadow-lg shadow-brand-600/30 transition hover:brightness-105 active:scale-[0.99]"
       @click="emit('generate')"
     >
-      ✨ 一键生成四件套（海报 · 文案 · 语音 · 脚本）
+      <AppIcon name="sparkles" :size="19" />
+      一键生成四件套（海报 · 文案 · 语音 · 脚本）
     </button>
     <div v-else-if="anyLoading" class="flex items-center justify-center gap-2 rounded-2xl bg-white px-4 py-4 text-sm text-stone-500 shadow-sm">
       <span class="h-2 w-2 animate-ping rounded-full bg-brand-500"></span>
@@ -73,10 +76,11 @@ const anyLoading = computed(() =>
         <button
           v-for="t in tabs"
           :key="t.key"
-          class="flex-1 px-2 py-3 text-xs font-semibold transition sm:text-sm"
+          class="flex flex-1 flex-col items-center justify-center gap-0.5 px-1 py-2.5 text-[11px] font-semibold transition sm:gap-1 sm:py-3 sm:text-xs"
           :class="tab === t.key ? 'border-b-2 border-brand-600 text-brand-700' : 'text-stone-400 hover:text-stone-600'"
           @click="tab = t.key"
         >
+          <AppIcon :name="t.icon" :size="15" />
           {{ t.label }}
         </button>
       </div>

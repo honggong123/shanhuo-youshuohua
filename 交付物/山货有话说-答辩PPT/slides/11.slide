@@ -1,0 +1,80 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 62, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 28 }}>
+            <Box style={{ width: 6, height: 32, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>核心创新：中文海报是怎么做出来的</Text>
+        </Box>
+
+        {/* 问题提出 */}
+        <Box style={{ background: '#FDF8F7', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 28, paddingRight: 28, marginBottom: 26 }}>
+            <Text style={{ fontSize: 17, color: '#6B5A59', lineHeight: 1.7 }}>
+                <Text style={{ fontSize: 17, color: '#B3413D', fontWeight: 'bold' }}>问题：</Text>
+                直接让文生图模型画带中文的海报，字必乱码、排版不可控、品牌信息写错 —— 做出来的东西不能用。
+            </Text>
+        </Box>
+
+        {/* 双栏方案 */}
+        <Box style={{ flexDirection: 'row', gap: 32 }}>
+
+            {/* 左：错误做法 */}
+            <Box style={{ width: 528, flexDirection: 'column' }}>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <Box style={{ width: 26, height: 26, background: '#C8CFD9', borderRadius: 13, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 15, color: '#FFFFFF', fontWeight: 'bold' }}>×</Text>
+                    </Box>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#8B97A8' }}>错误做法</Text>
+                </Box>
+
+                <Box style={{ background: '#F7F7F8', borderRadius: 10, paddingTop: 22, paddingBottom: 22, paddingLeft: 26, paddingRight: 26, flexDirection: 'column' }}>
+                    <Text style={{ fontSize: 17, color: '#6B7A90', lineHeight: 1.8 }}>
+                        "请画一张海报，上面写「高山蜂蜜，来自海拔 1200 米」"
+                    </Text>
+                    <Box style={{ width: 60, height: 2, background: '#E0E3E8', marginTop: 16, marginBottom: 16 }} />
+                    <Text style={{ fontSize: 16, color: '#9AA5B4', lineHeight: 1.8 }}>
+                        结果：文字变形、笔画缺失、字号无法控制、无法保证信息准确 —— 只能当底图看。
+                    </Text>
+                </Box>
+            </Box>
+
+            {/* 右：正确做法 */}
+            <Box style={{ width: 528, flexDirection: 'column' }}>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <Box style={{ width: 26, height: 26, background: '#1E4FA8', borderRadius: 13, alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 15, color: '#FFFFFF', fontWeight: 'bold' }}>✓</Text>
+                    </Box>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#0E3F8C' }}>我们的两段式方案</Text>
+                </Box>
+
+                <Box style={{ background: '#F5F8FD', borderRadius: 10, paddingTop: 22, paddingBottom: 22, paddingLeft: 26, paddingRight: 26, flexDirection: 'column' }}>
+                    <Box style={{ flexDirection: 'row', gap: 10, marginBottom: 12 }}>
+                        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 'bold' }}>第一段</Text>
+                        <Text style={{ fontSize: 15, color: '#3A4658', lineHeight: 1.7 }}>AI 只画"没有文字的底图"</Text>
+                    </Box>
+                    <Box style={{ flexDirection: 'row', gap: 10 }}>
+                        <Text style={{ fontSize: 15, color: '#1E4FA8', fontWeight: 'bold' }}>第二段</Text>
+                        <Text style={{ fontSize: 15, color: '#3A4658', lineHeight: 1.7 }}>本地用 Pillow 精确排版中文</Text>
+                    </Box>
+                    <Box style={{ width: 60, height: 2, background: '#C8D3E2', marginTop: 16, marginBottom: 16 }} />
+                    <Text style={{ fontSize: 16, color: '#0E3F8C', fontWeight: 600, lineHeight: 1.7 }}>
+                        字一定能看清、信息一定能写对，且每一张都能稳定复现。
+                    </Text>
+                </Box>
+            </Box>
+
+        </Box>
+
+        {/* 金句 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 34, justifyContent: 'center' }}>
+            <Box style={{ width: 6, height: 6, background: '#D9534F', borderRadius: 3 }} />
+            <Text style={{ fontSize: 22, color: '#0E3F8C', fontWeight: 'bold', letterSpacing: 2 }}>
+                AI 负责好看，我们负责准确
+            </Text>
+        </Box>
+
+    </Box>
+</Slide>

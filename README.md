@@ -101,7 +101,7 @@ npm run build
 │   │   ├── demo_data.py       # 演示数据（6 种山货 + 4 个村落）
 │   │   ├── routers/           # recognize / generate / poster / tts / guide
 │   │   └── services/          # llm / vision / poster / tts 封装
-│   ├── generated/             # 生成的海报与语音（运行时产生）
+│   ├── generated/             # 生成的海报与语音（运行时产生，自动重建）
 │   ├── requirements.txt
 │   ├── .env.example           # 配置模板（含免费模型说明）
 │   └── run.py
@@ -111,7 +111,21 @@ npm run build
 │   │   ├── api.js             # 接口封装
 │   │   └── components/        # UploadPanel / ResultsPanel / GuidePanel
 │   └── dist/                  # 构建产物（后端托管）
+├── miniprogram/               # 微信小程序端
+│   ├── pages/                 # 5 个页面
+│   └── assets/tabbar/         # 8 个 tabBar 图标
+├── deploy/                    # 部署配置与打包脚本
+│   ├── cloudrun.Dockerfile    # 云托管镜像（上传包用）
+│   └── build_cloudrun_zip.py  # 生成云托管上传包
+├── scripts/                   # 本地便利脚本（可选功能）
+│   ├── 启动后台.bat            # 无浏览器启动（供开机自启调用）
+│   ├── 一键设置开机自启.bat
+│   ├── 取消开机自启.bat
+│   └── 开放防火墙端口.bat      # 手机真机预览放行 8000 端口
 ├── test_images/               # 测试照片
+├── 交付物/                    # 参赛交付物（打包脚本 / 说明书 / PPT / 截图）
+├── Dockerfile                 # 通用容器镜像（云服务器 / Git 仓库构建）
+├── 启动.bat                   # 本地一键启动（自动开浏览器）
 └── README.md
 ```
 
@@ -141,3 +155,25 @@ npm run build
 | 2026 指定命题文件尚未发布 | 作品同时覆盖"乡村振兴 + AIGC"两个命题关键词，可灵活对口 |
 | AI 生成质量不稳定 | 提示词模板已内置产品营销专家角色；演示数据兜底 |
 | 评审现场网络故障 | 演示模式完全离线可用（本地模板海报 + 内置文案 + 缓存音频） |
+
+## 八、发布流程（改完代码必做）
+
+> **约定：每次改动代码后，必须同步三件东西——参赛提交包、答辩 PPT、线上部署。**
+> 前两件（提交包 / 云托管上传包）由脚本一键完成，后两件需人工确认。
+
+```bash
+# 一键同步：构建前端 → 生成参赛提交包 → 生成云托管上传包
+python scripts/release.py
+# 或双击：scripts\一键发布.bat
+```
+
+| 产出 | 生成方式 | 位置 | 说明 |
+|---|---|---|---|
+| 网页版构建 | `frontend/` 下 `npm run build` | `frontend/dist/` | 由后端托管，同时进云托管包 |
+| **参赛提交包** | `python 交付物/pack_submission.py` | `交付物/山货有话说-参赛作品源码.zip` | 竞赛表单**第 10 项**，已排除承诺书/截图/视频/PPT |
+| **云托管上传包** | `python deploy/build_cloudrun_zip.py` | `deploy/backend_cloudrun.zip` | 用于线上部署 |
+| **线上部署** | 人工：微信云托管控制台 → 新建版本 → 上传代码包 | 见 `deploy/部署上线指南.md` | CLI 不支持上传代码包；发布后验证 `/api/health` |
+| **答辩 PPT** | 编辑 `交付物/山货有话说-答辩PPT/slides/*.slide` | `交付物/山货有话说-答辩PPT/山货有话说-答辩.pptx` | 仅当关键数字/功能表述变化时更新 |
+
+> 提交包自检：脚本会校验 `.env`、`node_modules`、`generated/`、`.db`、PPT、截图、视频均未混入。
+

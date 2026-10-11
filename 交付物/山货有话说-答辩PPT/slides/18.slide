@@ -1,0 +1,54 @@
+<Slide style={{ width: 1280, height: 720, background: '#0E3F8C', position: 'relative', padding: 0 }}>
+    {/* 背景几何装饰 */}
+    <Box style={{ position: 'absolute', top: -100, right: -80, width: 480, height: 480, background: '#164C9E', borderRadius: 240 }} />
+    <Box style={{ position: 'absolute', bottom: -140, left: -60, width: 400, height: 400, background: '#143F82', borderRadius: 200 }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 6, background: '#2E6FC7' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 130, paddingLeft: 120, paddingRight: 120, flexDirection: 'column', alignItems: 'center' }}>
+
+        {/* 顶部小标 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 40 }}>
+            <Box style={{ width: 44, height: 4, background: '#2E6FC7' }} />
+            <Text style={{ fontSize: 17, color: '#9FC0E8', letterSpacing: 4 }}>THANK YOU FOR LISTENING</Text>
+            <Box style={{ width: 44, height: 4, background: '#2E6FC7' }} />
+        </Box>
+
+        {/* 主感谢 */}
+        <Text style={{ fontSize: 68, fontWeight: 'bold', color: '#FFFFFF', letterSpacing: 8 }}>
+            感 谢 聆 听
+        </Text>
+
+        {/* 金句 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 46 }}>
+            <Box style={{ width: 6, height: 6, background: '#D9534F', borderRadius: 3 }} />
+            <Text style={{ fontSize: 25, color: '#C5D8F0', letterSpacing: 2 }}>
+                让每一份山货都有话说，让每一个村落都被听见
+            </Text>
+        </Box>
+
+        {/* 分隔线 */}
+        <Box style={{ width: 520, height: 1, background: '#3A61A5', marginTop: 56, marginBottom: 36 }} />
+
+        {/* 信息区 */}
+        <Box style={{ flexDirection: 'row', gap: 80 }}>
+            <Box style={{ flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <Text style={{ fontSize: 14, color: '#8FB3DE', letterSpacing: 1 }}>汇 报 单 位</Text>
+                <Text style={{ fontSize: 19, color: '#FFFFFF', fontWeight: 600 }}>南昌航空大学科技学院</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <Text style={{ fontSize: 14, color: '#8FB3DE', letterSpacing: 1 }}>团 队 成 员</Text>
+                <Text style={{ fontSize: 19, color: '#FFFFFF', fontWeight: 600 }}>刘奉淳　陈邦楠　张进超　周涛</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <Text style={{ fontSize: 14, color: '#8FB3DE', letterSpacing: 1 }}>指 导 教 师</Text>
+                <Text style={{ fontSize: 19, color: '#FFFFFF', fontWeight: 600 }}>段欣妤　陈超</Text>
+            </Box>
+        </Box>
+
+        {/* 演示提示 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 54, background: '#164C9E', borderRadius: 8, paddingLeft: 24, paddingRight: 24, paddingTop: 12, paddingBottom: 12 }}>
+            <Text style={{ fontSize: 16, color: '#C5D8F0' }}>接下来进入现场演示环节，敬请指正</Text>
+        </Box>
+
+    </Box>
+</Slide>

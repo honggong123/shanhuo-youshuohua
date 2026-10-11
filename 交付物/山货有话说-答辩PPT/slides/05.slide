@@ -1,0 +1,62 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', position: 'relative', padding: 0 }}>
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 1280, height: 8, background: '#1E4FA8' }} />
+    <Box style={{ position: 'absolute', top: 0, left: 0, width: 14, height: 720, background: '#0E3F8C' }} />
+
+    <Box style={{ position: 'relative', paddingTop: 66, paddingLeft: 96, paddingRight: 96, flexDirection: 'column' }}>
+
+        {/* 页眉 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 16, marginBottom: 30 }}>
+            <Box style={{ width: 6, height: 34, background: '#1E4FA8', borderRadius: 3 }} />
+            <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#0E3F8C', letterSpacing: 2 }}>需求提炼：把复杂问题收敛成两个目标</Text>
+        </Box>
+
+        {/* 两个需求卡 */}
+        <Box style={{ flexDirection: 'row', gap: 28 }}>
+
+            <Box style={{ width: 530, background: '#F5F8FD', borderRadius: 12, paddingTop: 26, paddingBottom: 26, paddingLeft: 30, paddingRight: 30, flexDirection: 'column' }}>
+                <Text style={{ fontSize: 14, color: '#8B97A8', letterSpacing: 2, marginBottom: 10 }}>需 求 一</Text>
+                <Text style={{ fontSize: 27, fontWeight: 'bold', color: '#0E3F8C', marginBottom: 16 }}>低门槛内容生产</Text>
+                <Text style={{ fontSize: 17, color: '#3A4658', lineHeight: 1.7 }}>
+                    让农户用一部手机、一张照片，就能产出可发布的营销素材，无需任何专业设备与技能。
+                </Text>
+            </Box>
+
+            <Box style={{ width: 530, background: '#F5F8FD', borderRadius: 12, paddingTop: 26, paddingBottom: 26, paddingLeft: 30, paddingRight: 30, flexDirection: 'column' }}>
+                <Text style={{ fontSize: 14, color: '#8B97A8', letterSpacing: 2, marginBottom: 10 }}>需 求 二</Text>
+                <Text style={{ fontSize: 27, fontWeight: 'bold', color: '#0E3F8C', marginBottom: 16 }}>可复制文旅讲解</Text>
+                <Text style={{ fontSize: 17, color: '#3A4658', lineHeight: 1.7 }}>
+                    为每个村落生成专属数字讲解员，让文化故事随扫随听，一次建设、长期复用。
+                </Text>
+            </Box>
+
+        </Box>
+
+        {/* 核心指标三联数 */}
+        <Box style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 0, marginTop: 44 }}>
+
+            <Box style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 74, fontWeight: 'bold', color: '#0E3F8C', fontFamily: 'Times New Roman', lineHeight: 1 }}>30</Text>
+                <Text style={{ fontSize: 19, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>秒</Text>
+                <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 6 }}>单件素材生成耗时</Text>
+            </Box>
+
+            <Box style={{ width: 1, height: 88, background: '#D6DCE5' }} />
+
+            <Box style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 74, fontWeight: 'bold', color: '#1E4FA8', fontFamily: 'Times New Roman', lineHeight: 1 }}>5</Text>
+                <Text style={{ fontSize: 19, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>件套</Text>
+                <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 6 }}>一次生成全部交付物</Text>
+            </Box>
+
+            <Box style={{ width: 1, height: 88, background: '#D6DCE5' }} />
+
+            <Box style={{ width: 300, flexDirection: 'column', alignItems: 'center' }}>
+                <Text style={{ fontSize: 74, fontWeight: 'bold', color: '#D9534F', fontFamily: 'Times New Roman', lineHeight: 1 }}>29</Text>
+                <Text style={{ fontSize: 19, color: '#1A2230', fontWeight: 'bold', marginTop: 12 }}>个村落</Text>
+                <Text style={{ fontSize: 15, color: '#8B97A8', marginTop: 6 }}>可覆盖的文旅讲解点位</Text>
+            </Box>
+
+        </Box>
+
+    </Box>
+</Slide>

@@ -1,0 +1,32 @@
+<Slide style={{ width: 1280, height: 720, background: '#0E3F8C', position: 'relative', padding: 0 }}>
+    {/* 背景几何装饰 */}
+    <Box style={{ position: 'absolute', top: -80, right: -60, width: 460, height: 460, background: '#164C9E', borderRadius: 230 }} />
+    <Box style={{ position: 'absolute', bottom: -120, right: 180, width: 320, height: 320, background: '#143F82', borderRadius: 160 }} />
+
+    {/* 内容 */}
+    <Box style={{ position: 'relative', paddingTop: 240, paddingLeft: 120, flexDirection: 'column' }}>
+
+        {/* 大数字 */}
+        <Text style={{ fontSize: 190, fontWeight: 'bold', color: '#2E6FC7', fontFamily: 'Times New Roman', lineHeight: 1, letterSpacing: 4 }}>
+            01
+        </Text>
+
+        {/* 分隔线 */}
+        <Box style={{ width: 96, height: 5, background: '#FFFFFF', marginTop: 34, marginBottom: 30, borderRadius: 3 }} />
+
+        {/* 章节名 */}
+        <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#FFFFFF', letterSpacing: 6 }}>
+            创作背景与需求分析
+        </Text>
+
+        {/* 英文副标 */}
+        <Text style={{ fontSize: 20, color: '#9FC0E8', letterSpacing: 2, marginTop: 22, fontFamily: 'Times New Roman' }}>
+            Background & Requirement Analysis
+        </Text>
+
+        {/* 导语 */}
+        <Text style={{ fontSize: 19, color: '#C5D8F0', marginTop: 34, letterSpacing: 1 }}>
+            从山区的真实困境出发，找到真正值得被解决的问题
+        </Text>
+    </Box>
+</Slide>

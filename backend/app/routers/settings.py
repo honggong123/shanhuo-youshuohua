@@ -1,9 +1,14 @@
-"""模型引擎（厂商）查询、切换与在线接入接口。"""
-from fastapi import APIRouter, HTTPException
+"""模型引擎（厂商）查询、切换与在线接入接口。
+
+- GET /api/providers：公开，前端启动时读取当前状态；
+- switch / connect：需要登录（会写入服务器 .env，必须鉴权）。
+"""
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from .. import config
 from ..providers import PROVIDERS
+from .auth import current_user
 
 router = APIRouter()
 
@@ -54,7 +59,7 @@ def get_providers():
 
 
 @router.post("/api/providers/switch")
-def switch_provider(body: SwitchIn):
+def switch_provider(body: SwitchIn, user: dict = Depends(current_user)):
     try:
         config.switch_provider(body.provider_id)
     except KeyError:
@@ -65,7 +70,7 @@ def switch_provider(body: SwitchIn):
 
 
 @router.post("/api/providers/connect")
-def connect_provider(body: ConnectIn):
+def connect_provider(body: ConnectIn, user: dict = Depends(current_user)):
     if body.provider_id not in PROVIDERS:
         raise HTTPException(status_code=404, detail=f"未知厂商：{body.provider_id}")
     try:

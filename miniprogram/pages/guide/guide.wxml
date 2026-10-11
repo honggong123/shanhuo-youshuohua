@@ -1,5 +1,5 @@
 <view class="card">
-  <view class="title">🧭 云游乡村</view>
+  <view class="title"><view class="title-bar"></view>云游乡村</view>
   <view class="subtitle" style="margin-top: 6rpx;">已收录 {{villages.length}} 个村落 · 覆盖 {{provinces.length}} 个省区</view>
 
   <!-- 省份筛选 -->
