@@ -23,8 +23,12 @@ def config_demo():
     return DEMO_PRODUCTS
 
 
-def recognize(image_b64: str) -> dict:
-    if not config.VISION_API_KEY or not config.VISION_MODEL:
+def recognize(image_b64: str, creds=None) -> dict:
+    """识图。creds 为按账号解析出的凭据；不传则用部署方默认配置。"""
+    key = creds.vision_key if creds else config.VISION_API_KEY
+    model = creds.vision_model if creds else config.VISION_MODEL
+    base = creds.vision_base if creds else config.VISION_BASE_URL
+    if not key or not model:
         return _demo_result(image_b64)
     data_url = f"data:image/jpeg;base64,{image_b64}"
     try:
@@ -36,9 +40,9 @@ def recognize(image_b64: str) -> dict:
                     {"type": "image_url", "image_url": {"url": data_url}},
                 ]},
             ],
-            model=config.VISION_MODEL,
-            api_key=config.VISION_API_KEY,
-            base_url=config.VISION_BASE_URL,
+            model=model,
+            api_key=key,
+            base_url=base,
             temperature=0.2,
         )
         data = llm.extract_json(text)

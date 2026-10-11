@@ -30,6 +30,15 @@ def current_user(authorization: str = Header(default="")) -> dict:
     return user
 
 
+def optional_user(authorization: str = Header(default="")) -> dict | None:
+    """可选鉴权：有有效令牌则返回用户，否则返回 None（不报 401）。
+
+    用于生成类接口——登录用户走自己的私有 Key，未登录走部署方默认 Key，
+    从而既保证账号隔离，又不破坏"免登录即可演示"。
+    """
+    return db.user_from_token(_token_from_header(authorization))
+
+
 @router.post("/api/auth/register")
 def register(body: AuthIn):
     try:

@@ -56,6 +56,17 @@ def init_db() -> None:
             title TEXT NOT NULL DEFAULT '',
             poster_url TEXT NOT NULL DEFAULT '',
             created_at INTEGER NOT NULL)""")
+        # 用户私有的大模型 API Key（按账号隔离；部署方默认 Key 仍走 .env）
+        c.execute("""CREATE TABLE IF NOT EXISTS user_providers(
+            user_id INTEGER NOT NULL,
+            provider_id TEXT NOT NULL,
+            api_key TEXT NOT NULL,
+            created_at INTEGER NOT NULL,
+            PRIMARY KEY (user_id, provider_id))""")
+        # 用户偏好厂商（切换"模型引擎"时写这里，不再改全局状态）
+        c.execute("""CREATE TABLE IF NOT EXISTS user_settings(
+            user_id INTEGER PRIMARY KEY,
+            active_provider TEXT NOT NULL DEFAULT '')""")
 
 
 def _hash(password: str, salt_hex: str) -> str:
@@ -161,5 +172,63 @@ def delete_history(user_id: int, history_id: int) -> bool:
             "DELETE FROM history WHERE id = ? AND user_id = ?", (history_id, user_id)
         )
         # 必须在连接关闭前读取 rowcount（关闭后游标不可用）
+        affected = cur.rowcount
+    return affected > 0
+
+
+# ---------------- 用户私有的大模型 Key（按账号隔离） ----------------
+
+def set_user_key(user_id: int, provider_id: str, api_key: str) -> None:
+    """写入/覆盖某账号在某厂商下的私有 Key，并把该厂商设为其偏好。"""
+    now = int(time.time())
+    with get_conn() as c:
+        c.execute(
+            "INSERT INTO user_providers(user_id, provider_id, api_key, created_at)"
+            " VALUES(?, ?, ?, ?)"
+            " ON CONFLICT(user_id, provider_id)"
+            " DO UPDATE SET api_key = excluded.api_key, created_at = excluded.created_at",
+            (user_id, provider_id, api_key, now),
+        )
+        c.execute(
+            "INSERT INTO user_settings(user_id, active_provider) VALUES(?, ?)"
+            " ON CONFLICT(user_id) DO UPDATE SET active_provider = excluded.active_provider",
+            (user_id, provider_id),
+        )
+
+
+def user_keys(user_id: int) -> dict[str, str]:
+    """该账号已配置的私有 Key：{provider_id: api_key}。"""
+    with get_conn() as c:
+        rows = c.execute(
+            "SELECT provider_id, api_key FROM user_providers WHERE user_id = ?",
+            (user_id,),
+        ).fetchall()
+    return {r["provider_id"]: r["api_key"] for r in rows}
+
+
+def user_active_provider(user_id: int) -> str:
+    """该账号偏好的厂商 id；未设置返回空串。"""
+    with get_conn() as c:
+        row = c.execute(
+            "SELECT active_provider FROM user_settings WHERE user_id = ?", (user_id,)
+        ).fetchone()
+    return row["active_provider"] if row else ""
+
+
+def set_user_active_provider(user_id: int, provider_id: str) -> None:
+    with get_conn() as c:
+        c.execute(
+            "INSERT INTO user_settings(user_id, active_provider) VALUES(?, ?)"
+            " ON CONFLICT(user_id) DO UPDATE SET active_provider = excluded.active_provider",
+            (user_id, provider_id),
+        )
+
+
+def delete_user_key(user_id: int, provider_id: str) -> bool:
+    with get_conn() as c:
+        cur = c.execute(
+            "DELETE FROM user_providers WHERE user_id = ? AND provider_id = ?",
+            (user_id, provider_id),
+        )
         affected = cur.rowcount
     return affected > 0

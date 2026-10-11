@@ -1,10 +1,11 @@
 """AI 数字讲解员接口：村落讲解 + 问答。"""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from .. import config
 from ..services import llm
 from ..villages import DEMO_VILLAGES, demo_story
 from ..schemas import GuideIn, GuideOut, Village
+from .auth import optional_user
 
 router = APIRouter()
 
@@ -34,9 +35,10 @@ def villages():
 
 
 @router.post("/api/guide", response_model=GuideOut)
-def guide(body: GuideIn):
+def guide(body: GuideIn, user: dict | None = Depends(optional_user)):
     v = _find(body.village_id)
-    live = bool(config.LLM_API_KEY)  # 是否真正走大模型（失败回退后置 False）
+    creds = config.creds_for_user(user["id"] if user else None)
+    live = bool(creds.llm_key)  # 是否真正走大模型（失败回退后置 False）
     if body.question.strip():
         if not live:
             text = (f"（演示模式）关于{v['name']}：{v['intro']} "
@@ -48,7 +50,7 @@ def guide(body: GuideIn):
                     {"role": "system", "content": "你是亲切的乡村文旅讲解员，回答简短口语化。"},
                     {"role": "user", "content": QA_PROMPT.format(
                         name=v["name"], province=v["province"], intro=v["intro"], question=body.question)},
-                ], temperature=0.7)
+                ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model, temperature=0.7)
             except Exception:
                 text = f"关于{v['name']}：{v['intro']}"
                 live = False
@@ -62,7 +64,7 @@ def guide(body: GuideIn):
                     {"role": "user", "content": STORY_PROMPT.format(
                         name=v["name"], province=v["province"], intro=v["intro"],
                         tags="、".join(v["tags"]))},
-                ], temperature=0.8)
+                ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model, temperature=0.8)
             except Exception:
                 text = demo_story(v)
                 live = False

@@ -7,13 +7,14 @@
 import base64
 import time
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.concurrency import run_in_threadpool
 
 from .. import config
 from ..files import MAX_IMAGE_BYTES, prune_dir, read_image_and_form
 from ..schemas import RecognizeOut
 from ..services import vision
+from .auth import optional_user
 
 router = APIRouter()
 
@@ -22,11 +23,12 @@ MAX_IMAGE_SIZE = MAX_IMAGE_BYTES
 
 
 @router.post("/api/recognize", response_model=RecognizeOut)
-async def recognize(request: Request):
+async def recognize(request: Request, user: dict | None = Depends(optional_user)):
     raw, _ = await read_image_and_form(request)
     # 毫秒时间戳避免同一秒内互相覆盖；滚动清理历史上传
     (config.UPLOADS_DIR / f"upload_{int(time.time() * 1000)}.jpg").write_bytes(raw)
     prune_dir(config.UPLOADS_DIR, keep=200)
     b64 = base64.b64encode(raw).decode()
-    data = await run_in_threadpool(vision.recognize, b64)
+    creds = config.creds_for_user(user["id"] if user else None)
+    data = await run_in_threadpool(vision.recognize, b64, creds)
     return RecognizeOut(**data)

@@ -1,13 +1,14 @@
 """文案 + 短视频脚本生成接口。"""
 import hashlib
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from .. import config
 from ..price_reference import price_reference_for
 from ..schemas import GenerateIn, GenerateOut, PriceInfo, Scene
 from ..demo_data import DEMO_PRODUCTS
 from ..services import llm
+from .auth import optional_user
 
 router = APIRouter()
 
@@ -50,8 +51,10 @@ def _parse_price(raw) -> PriceInfo:
 
 
 @router.post("/api/generate", response_model=GenerateOut)
-def generate(info: GenerateIn):
-    if not config.LLM_API_KEY:
+def generate(info: GenerateIn, user: dict | None = Depends(optional_user)):
+    # 登录用户用自己的私有 Key，未登录用部署方默认 Key
+    creds = config.creds_for_user(user["id"] if user else None)
+    if not creds.llm_key:
         return _demo(info)
     # 行情锚点：有核实行情则强制对齐，无则要求保守估算并注明
     ref = price_reference_for(info.name)
@@ -67,7 +70,7 @@ def generate(info: GenerateIn):
                 name=info.name, category=info.category or "农产品",
                 origin=info.origin or "中国乡村", highlights="、".join(info.highlights) or "优质山货",
             )},
-        ])
+        ], api_key=creds.llm_key, base_url=creds.llm_base, model=creds.llm_model)
         data = llm.extract_json(text)
         return GenerateOut(
             title=str(data.get("title", info.name)).strip(),

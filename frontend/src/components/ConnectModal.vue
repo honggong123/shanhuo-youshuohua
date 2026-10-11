@@ -65,7 +65,7 @@ async function connect() {
       <div class="flex items-start justify-between">
         <div>
           <h3 class="text-lg font-bold text-stone-900">🔌 接入大模型</h3>
-          <p class="mt-1 text-xs text-stone-500">粘贴 API Key，验证通过后立即生效并保存到本机</p>
+          <p class="mt-1 text-xs text-stone-500">粘贴 API Key，验证通过后<b>仅绑定到你的账号</b>，其他账号无法使用</p>
         </div>
         <button class="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-600" @click="emit('close')">
           ✕
@@ -86,7 +86,7 @@ async function connect() {
         >
           <span class="font-semibold text-stone-800">{{ p.name }}</span>
           <span v-if="p.id === activeId" class="ml-1 rounded bg-brand-600 px-1 py-0.5 text-[10px] text-white">使用中</span>
-          <p class="mt-0.5 text-[10px] leading-tight text-stone-400">{{ p.available ? '已接入' : p.vision_model || p.img_model ? '支持识图' : '仅文本' }}</p>
+          <p class="mt-0.5 text-[10px] leading-tight text-stone-400">{{ p.mine ? '我的 Key' : p.available ? '平台默认可用' : p.vision_model || p.img_model ? '支持识图' : '仅文本' }}</p>
         </button>
       </div>
 
@@ -117,7 +117,7 @@ async function connect() {
       </div>
 
       <p v-if="selected" class="mt-2 text-[11px] leading-relaxed text-stone-400">
-        💡 {{ selected.note }}。Key 仅保存在本机 backend/.env，不会上传到任何服务器。
+        💡 {{ selected.note }}。Key 仅保存在服务器并绑定你的账号，其他账号无法调用。
       </p>
 
       <!-- 错误提示 -->

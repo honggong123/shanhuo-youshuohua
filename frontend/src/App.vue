@@ -78,6 +78,11 @@ function onAuthed(u) {
   resetCreation()  // 登录成功后从干净状态开始，杜绝上一个账号的遗留
   user.value = u
   histTick.value++
+  // 登录后重新拉取"我自己的"模型引擎状态（未登录时看到的是部署方默认）
+  api
+    .providers()
+    .then((s) => (engine.value = s))
+    .catch(() => {})
 }
 
 async function logout() {
@@ -269,16 +274,17 @@ async function generateAll() {
             : p.available
               ? 'border-stone-200 text-stone-600 hover:border-brand-400 hover:text-brand-700'
               : 'cursor-not-allowed border-stone-100 text-stone-300'"
-          :title="p.available ? p.note : `${p.note}（需在 backend/.env 配置 ${p.note ? '对应 Key' : 'Key'}）`"
+          :title="p.available ? p.note : `${p.note}（点“接入大模型”填入你自己的 Key 即可启用）`"
           @click="pickProvider(p)"
         >
           {{ p.name }}
           <span v-if="p.id === engine.active">✓</span>
           <span v-else-if="!p.available" class="ml-0.5 text-[10px]">未配置</span>
+          <span v-if="p.mine" class="ml-1 text-[9px] opacity-80">·我的</span>
         </button>
       </div>
       <p class="mt-2 text-[11px] leading-relaxed text-stone-400">
-        在 backend/.env 中配置对应厂商的 API Key 后即可启用并一键切换；识图/生图能力视厂商而定。
+        你接入的 Key <b>只绑定当前账号</b>，其他账号无法使用；未接入时自动使用平台默认模型（不可用时降级为演示数据）。
       </p>
     </section>
 

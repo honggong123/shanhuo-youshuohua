@@ -1,14 +1,16 @@
 """模型引擎（厂商）查询、切换与在线接入接口。
 
-- GET /api/providers：公开，前端启动时读取当前状态；
-- switch / connect：需要登录（会写入服务器 .env，必须鉴权）。
+权限模型（Key 按账号隔离）：
+- GET  /api/providers        可选鉴权：登录后返回"你自己的"厂商状态，未登录返回部署方默认；
+- POST /api/providers/switch 需登录：只改【当前账号】的偏好厂商，不再动全局状态；
+- POST /api/providers/connect 需登录：Key 只写入【当前账号】，不影响其他账号、不写 .env。
 """
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from .. import config
 from ..providers import PROVIDERS
-from .auth import current_user
+from .auth import current_user, optional_user
 
 router = APIRouter()
 
@@ -54,19 +56,18 @@ def validate_key(provider_id: str, api_key: str) -> None:
 
 
 @router.get("/api/providers")
-def get_providers():
-    return config.snapshot()
+def get_providers(user: dict | None = Depends(optional_user)):
+    return config.snapshot_for_user(user["id"] if user else None)
 
 
 @router.post("/api/providers/switch")
 def switch_provider(body: SwitchIn, user: dict = Depends(current_user)):
     try:
-        config.switch_provider(body.provider_id)
+        return config.set_user_provider(user["id"], body.provider_id)
     except KeyError:
         raise HTTPException(status_code=404, detail=f"未知厂商：{body.provider_id}")
     except PermissionError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return config.snapshot()
 
 
 @router.post("/api/providers/connect")
@@ -78,7 +79,6 @@ def connect_provider(body: ConnectIn, user: dict = Depends(current_user)):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     try:
-        config.register_key(body.provider_id, body.api_key)
+        return config.register_user_key(user["id"], body.provider_id, body.api_key)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return config.snapshot()

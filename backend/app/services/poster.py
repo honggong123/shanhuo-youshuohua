@@ -123,8 +123,13 @@ def _text_shadow(d, pos, text: str, font, fill, shadow=(0, 0, 0, 120), off=3):
     d.text((x, y), text, font=font, fill=fill)
 
 
-def _ai_art(name: str, origin: str) -> Image.Image | None:
-    if not config.IMG_API_KEY or not config.IMG_MODEL:
+def _ai_art(name: str, origin: str, creds=None) -> Image.Image | None:
+    """生成 AI 底图。creds 为按账号解析出的凭据；不传则用部署方默认配置。"""
+    key = creds.img_key if creds else config.IMG_API_KEY
+    model = creds.img_model if creds else config.IMG_MODEL
+    base = creds.img_base if creds else config.IMG_BASE_URL
+    size = (creds.img_size if creds else config.IMG_SIZE) or "768x1344"
+    if not key or not model:
         return None
     prompt = (
         f"中国风文创宣传海报背景插画，主体是{name}，{origin}的乡土元素，"
@@ -133,10 +138,10 @@ def _ai_art(name: str, origin: str) -> Image.Image | None:
     try:
         from openai import OpenAI
 
-        client = OpenAI(api_key=config.IMG_API_KEY, base_url=config.IMG_BASE_URL, timeout=120)
+        client = OpenAI(api_key=key, base_url=base, timeout=120)
         resp = client.images.generate(
-            model=config.IMG_MODEL, prompt=prompt,
-            size=config.IMG_SIZE or "768x1344", n=1,
+            model=model, prompt=prompt,
+            size=size, n=1,
             response_format="b64_json",
         )
         item = resp.data[0]
@@ -158,13 +163,13 @@ def _ai_art(name: str, origin: str) -> Image.Image | None:
         return None
 
 
-def compose(image_b64: str, name: str, tagline: str, origin: str) -> tuple[Path, bool]:
+def compose(image_b64: str, name: str, tagline: str, origin: str, creds=None) -> tuple[Path, bool]:
     """返回 (海报文件路径, 是否使用了 AI 底图)。"""
     GENERATED.mkdir(exist_ok=True)
     theme = THEMES[int(hashlib.sha256(name.encode()).hexdigest(), 16) % len(THEMES)]
     seed = int(hashlib.sha256(("dots:" + name).encode()).hexdigest(), 16)
 
-    art = _ai_art(name, origin)
+    art = _ai_art(name, origin, creds)
     if art is not None:
         base = _cover(art, W, H)
         ai = True

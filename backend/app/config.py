@@ -6,6 +6,7 @@
 - 未配置任何 Key 时自动进入演示模式（DEMO_MODE = True）。
 """
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -122,14 +123,87 @@ def _apply(pid: str | None) -> None:
 _apply(_default_pid)
 
 
-def available_providers() -> list[dict]:
-    """厂商列表，供前端展示与切换。"""
+@dataclass(frozen=True)
+class Creds:
+    """一次请求实际使用的大模型连接信息（已按账号解析完毕）。"""
+
+    provider: str | None = None
+    demo: bool = True
+    llm_key: str = ""
+    llm_base: str = ""
+    llm_model: str = ""
+    vision_key: str = ""
+    vision_base: str = ""
+    vision_model: str = ""
+    img_key: str = ""
+    img_base: str = ""
+    img_model: str = ""
+    img_size: str = ""
+
+
+def _creds_from(pid: str, key: str) -> Creds:
+    p = PROVIDERS[pid]
+    return Creds(
+        provider=pid,
+        demo=False,
+        llm_key=key,
+        llm_base=p["base_url"],
+        llm_model=p["text_model"],
+        vision_key=key,
+        vision_base=p["base_url"],
+        vision_model=p["vision_model"] or "",
+        img_key=key,
+        img_base=p["base_url"],
+        img_model=p["img_model"] or "",
+        img_size=p.get("img_size") or "",
+    )
+
+
+def default_creds() -> Creds:
+    """部署方默认凭据：未登录用户、或未配置私有 Key 的用户使用。"""
+    if ACTIVE_PROVIDER and ACTIVE_PROVIDER in KEYS:
+        return _creds_from(ACTIVE_PROVIDER, KEYS[ACTIVE_PROVIDER])
+    return Creds()  # provider=None → 演示模式
+
+
+def creds_for_user(user_id: int | None) -> Creds:
+    """按账号解析凭据：用户私有 Key 优先 → 回退部署方默认 → 演示模式。
+
+    未登录（user_id 为 None）时直接使用部署方默认，保证免登录也能演示。
+    """
+    if not user_id:
+        return default_creds()
+    from . import db  # 延迟导入，避免与 db.py 形成循环依赖
+
+    ukeys = db.user_keys(user_id)
+    pref = db.user_active_provider(user_id)
+    pid = None
+    if pref and (pref in ukeys or pref in KEYS):
+        pid = pref
+    elif ukeys:
+        pid = next(iter(ukeys))
+    if pid:
+        key = ukeys.get(pid) or KEYS.get(pid)
+        if key:
+            return _creds_from(pid, key)
+    return default_creds()
+
+
+def providers_for_user(user_id: int | None) -> list[dict]:
+    """厂商列表（按账号视角）：available = 自己有 Key 或部署方有 Key。"""
+    ukeys: set[str] = set()
+    if user_id:
+        from . import db
+
+        ukeys = set(db.user_keys(user_id))
+    active = creds_for_user(user_id).provider
     return [
         {
             "id": pid,
             "name": p["name"],
-            "available": pid in KEYS,
-            "active": pid == ACTIVE_PROVIDER,
+            "available": pid in ukeys or pid in KEYS,
+            "mine": pid in ukeys,
+            "active": pid == active,
             "signup_url": p.get("signup_url", ""),
             "text_model": p["text_model"],
             "vision_model": p["vision_model"],
@@ -140,52 +214,44 @@ def available_providers() -> list[dict]:
     ]
 
 
-def switch_provider(pid: str) -> dict:
-    """切换到指定厂商。厂商不存在抛 KeyError；未配置 Key 抛 PermissionError。"""
-    if pid not in PROVIDERS:
-        raise KeyError(pid)
-    if pid not in KEYS:
-        raise PermissionError(f"厂商 {pid} 未配置 API Key，请在 backend/.env 中设置")
-    _apply(pid)
-    return {"active": ACTIVE_PROVIDER, "demo": DEMO_MODE}
-
-
-def snapshot() -> dict:
-    """当前引擎状态（/api/providers 与切换接口的统一返回）。"""
+def snapshot_for_user(user_id: int | None) -> dict:
+    """当前引擎状态（按账号视角），/api/providers 与切换接口统一返回。"""
+    creds = creds_for_user(user_id)
     return {
-        "active": ACTIVE_PROVIDER,
-        "demo": DEMO_MODE,
-        "providers": available_providers(),
+        "active": creds.provider,
+        "demo": creds.demo,
+        "providers": providers_for_user(user_id),
     }
 
 
-def _save_key_env(pid: str, key: str) -> None:
-    """把 Key 持久化到 backend/.env（更新对应行或追加），其余内容原样保留。"""
-    env_name = PROVIDERS[pid]["key_env"]
-    env_path = BACKEND_DIR / ".env"
-    lines = env_path.read_text(encoding="utf-8").splitlines() if env_path.exists() else []
-    out, found = [], False
-    for ln in lines:
-        if not found and ln.strip().startswith(f"{env_name}=") and not ln.strip().startswith("#"):
-            out.append(f"{env_name}={key}")
-            found = True
-        else:
-            out.append(ln)
-    if not found:
-        out.append(f"{env_name}={key}")
-    env_path.write_text("\n".join(out) + "\n", encoding="utf-8")
-
-
-def register_key(pid: str, key: str) -> dict:
-    """登记（并持久化）一个新 Key，使其立即可用。厂商不存在抛 KeyError。"""
-    if pid not in PROVIDERS:
-        raise KeyError(pid)
-    key = key.strip()
+def _clean_key(key: str) -> str:
+    """校验并规范化 API Key（必须单行且 ≤200 字符，防止污染存储）。"""
+    key = (key or "").strip()
     if not key:
         raise ValueError("API Key 不能为空")
-    # 防注入：Key 必须是单行短字符串，否则会污染 .env（写入时按行拼接）
     if any(ch in key for ch in "\r\n") or len(key) > 200:
         raise ValueError("API Key 格式不正确（应为单行、长度不超过 200）")
-    KEYS[pid] = key
-    _save_key_env(pid, key)
-    return switch_provider(pid)
+    return key
+
+
+def register_user_key(user_id: int, pid: str, key: str) -> dict:
+    """把 Key 登记到【当前账号】名下（只影响该账号，不写 .env、不影响他人）。"""
+    if pid not in PROVIDERS:
+        raise KeyError(pid)
+    key = _clean_key(key)
+    from . import db
+
+    db.set_user_key(user_id, pid, key)
+    return snapshot_for_user(user_id)
+
+
+def set_user_provider(user_id: int, pid: str) -> dict:
+    """设置【当前账号】偏好的厂商；该账号与部署方都无 Key 时抛 PermissionError。"""
+    if pid not in PROVIDERS:
+        raise KeyError(pid)
+    from . import db
+
+    if pid not in db.user_keys(user_id) and pid not in KEYS:
+        raise PermissionError(f"厂商 {pid} 未配置 API Key，请先接入你自己的 Key")
+    db.set_user_active_provider(user_id, pid)
+    return snapshot_for_user(user_id)
