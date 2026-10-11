@@ -284,7 +284,7 @@ async function generateAll() {
         </button>
       </div>
       <p class="mt-2 text-[11px] leading-relaxed text-stone-400">
-        你接入的 Key <b>只绑定当前账号</b>，其他账号无法使用；未接入时自动使用平台默认模型（不可用时降级为演示数据）。
+        你接入的 Key <b>只绑定当前账号</b>，其他账号无法使用；未接入时自动使用平台默认模型。识图/生图能力随厂商而定，缺失时自动回退平台默认。
       </p>
     </section>
 

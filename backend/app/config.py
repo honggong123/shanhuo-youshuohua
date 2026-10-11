@@ -141,52 +141,86 @@ class Creds:
     img_size: str = ""
 
 
-def _creds_from(pid: str, key: str) -> Creds:
-    p = PROVIDERS[pid]
+def _capability(ukeys: dict[str, str], need: str) -> tuple[str, str]:
+    """为某项能力（vision_model / img_model）挑一个"支持它"的厂商。
+
+    优先用户私有 Key，其次部署方默认 Key；都没有则返回 ("", "")。
+    """
+    for pid, k in ukeys.items():
+        if PROVIDERS[pid].get(need):
+            return pid, k
+    for pid in KEYS:
+        if PROVIDERS[pid].get(need):
+            return pid, KEYS[pid]
+    return "", ""
+
+
+def creds_for_user(user_id: int | None) -> Creds:
+    """按账号解析凭据。
+
+    - 文本能力：用户偏好厂商 → 用户第一个私有 Key → 部署方默认；
+    - 识图 / 生图：所选厂商支持就用它；**不支持时自动回退**到"支持该能力"的
+      厂商（先用户私有、再部署方），避免用户接入一个纯文本 Key 后识图/海报
+      退化成演示数据；
+    - 完全无可用 Key → 演示模式。
+
+    未登录（user_id 为 None）时等价于只用部署方默认 Key，保证免登录也能演示。
+    """
+    ukeys: dict[str, str] = {}
+    pref = ""
+    if user_id:
+        from . import db  # 延迟导入，避免与 db.py 形成循环依赖
+
+        ukeys = db.user_keys(user_id)
+        pref = db.user_active_provider(user_id)
+
+    # ---- 文本厂商 ----
+    text_pid = None
+    if pref and (pref in ukeys or pref in KEYS):
+        text_pid = pref
+    elif ukeys:
+        text_pid = next(iter(ukeys))
+    elif ACTIVE_PROVIDER:
+        text_pid = ACTIVE_PROVIDER
+    if not text_pid:
+        return Creds()  # provider=None → 演示模式
+    text_key = ukeys.get(text_pid) or KEYS.get(text_pid)
+    if not text_key:
+        return Creds()
+    tp = PROVIDERS[text_pid]
+
+    # ---- 识图 / 生图（支持则沿用所选厂商，否则回退）----
+    def cap(need: str) -> tuple[str, str, str, str]:
+        if tp.get(need):
+            return text_pid, text_key, tp["base_url"], tp[need]
+        pid, k = _capability(ukeys, need)
+        if not pid:
+            return "", "", "", ""
+        p = PROVIDERS[pid]
+        return pid, k, p["base_url"], p[need]
+
+    _, vk, vb, vm = cap("vision_model")
+    ipid, ik, ib, im = cap("img_model")
+
     return Creds(
-        provider=pid,
+        provider=text_pid,
         demo=False,
-        llm_key=key,
-        llm_base=p["base_url"],
-        llm_model=p["text_model"],
-        vision_key=key,
-        vision_base=p["base_url"],
-        vision_model=p["vision_model"] or "",
-        img_key=key,
-        img_base=p["base_url"],
-        img_model=p["img_model"] or "",
-        img_size=p.get("img_size") or "",
+        llm_key=text_key,
+        llm_base=tp["base_url"],
+        llm_model=tp["text_model"],
+        vision_key=vk,
+        vision_base=vb,
+        vision_model=vm,
+        img_key=ik,
+        img_base=ib,
+        img_model=im,
+        img_size=(PROVIDERS[ipid].get("img_size") or "") if ipid else "",
     )
 
 
 def default_creds() -> Creds:
-    """部署方默认凭据：未登录用户、或未配置私有 Key 的用户使用。"""
-    if ACTIVE_PROVIDER and ACTIVE_PROVIDER in KEYS:
-        return _creds_from(ACTIVE_PROVIDER, KEYS[ACTIVE_PROVIDER])
-    return Creds()  # provider=None → 演示模式
-
-
-def creds_for_user(user_id: int | None) -> Creds:
-    """按账号解析凭据：用户私有 Key 优先 → 回退部署方默认 → 演示模式。
-
-    未登录（user_id 为 None）时直接使用部署方默认，保证免登录也能演示。
-    """
-    if not user_id:
-        return default_creds()
-    from . import db  # 延迟导入，避免与 db.py 形成循环依赖
-
-    ukeys = db.user_keys(user_id)
-    pref = db.user_active_provider(user_id)
-    pid = None
-    if pref and (pref in ukeys or pref in KEYS):
-        pid = pref
-    elif ukeys:
-        pid = next(iter(ukeys))
-    if pid:
-        key = ukeys.get(pid) or KEYS.get(pid)
-        if key:
-            return _creds_from(pid, key)
-    return default_creds()
+    """部署方默认凭据（未登录用户、或未配置私有 Key 的用户使用）。"""
+    return creds_for_user(None)
 
 
 def providers_for_user(user_id: int | None) -> list[dict]:
